@@ -12,6 +12,8 @@ java {
 dependencies {
     implementation(project(":domain"))
 
+    implementation(Library.Kotlin.COROUTINE_CORE)
+
     implementation(Library.Network.RETROFIT)
     implementation(Library.Network.CONVERTER_MOSHI)
     implementation(Library.Network.MOSHI)
