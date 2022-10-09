@@ -1,5 +1,7 @@
 object Version {
 
+    const val COROUTINE = "1.6.1"
+
     const val CORE = "1.8.0"
     const val APPCOMPAT = "1.4.2"
     const val CONSTRAINT_LAYOUT = "2.1.4"
@@ -20,6 +22,11 @@ object Version {
 }
 
 object Library {
+
+    object Kotlin {
+        const val COROUTINE = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINE}"
+        const val COROUTINE_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINE}"
+    }
 
     object AndroidX {
 
