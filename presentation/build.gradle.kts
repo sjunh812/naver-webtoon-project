@@ -45,14 +45,15 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(Library.AndroidX.CORE)
     implementation(Library.AndroidX.APPCOMPAT)
     implementation(Library.AndroidX.CONSTRAINT_LAYOUT)
     implementation(Library.AndroidX.NAVIGATION_RUNTIME)
     implementation(Library.AndroidX.NAVIGATION_FRAGMENT)
-    implementation(Library.AndroidX.ANDROID_JUNIT)
-    implementation(Library.AndroidX.ESPRESSO)
+    androidTestImplementation(Library.AndroidX.ANDROID_JUNIT)
+    androidTestImplementation(Library.AndroidX.ESPRESSO)
 
     implementation(Library.Google.MATERIAL)
 
@@ -60,4 +61,7 @@ dependencies {
 
     implementation(Library.Hilt.ANDROID)
     kapt(Library.Hilt.ANDROID_COMPILER)
+
+    implementation(Library.Glide.GLIDE)
+    kapt(Library.Glide.GLIDE_COMPILER)
 }

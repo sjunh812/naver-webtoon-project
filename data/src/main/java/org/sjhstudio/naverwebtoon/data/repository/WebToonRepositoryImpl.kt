@@ -1,19 +1,20 @@
-package org.sjhstudio.naverwebtoon.repository
+package org.sjhstudio.naverwebtoon.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jsoup.Jsoup
-import org.sjhstudio.naverwebtoon.data.api.NaverWebToonApi
+import org.sjhstudio.naverwebtoon.data.api.NaverWebToonService
 import org.sjhstudio.naverwebtoon.domain.model.WebToon
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import javax.inject.Inject
 
 internal class WebToonRepositoryImpl @Inject constructor(
-    private val api: NaverWebToonApi
+    private val webToonService: NaverWebToonService
 ) : WebToonRepository {
 
     override fun getWeekdayList(week: String): Flow<List<WebToon>> = flow {
-        Jsoup.parse(api.getWeekdayList(week).charStream().readText())
+        val list = mutableListOf<WebToon>()
+        Jsoup.parse(webToonService.getWeekdayList(week).charStream().readText())
             .select("ul.img_list")
             .select("li").forEach { element ->
                 val thumbHref = element.select("div.thumb > a").attr("href")
@@ -30,7 +31,8 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 val rating = element.select("div.rating_type > strong").text()
                 val thumbnail = element.select("div.thumb > a > img").attr("src")
 
-                println("xxx id: $id, name: $name, writer: $writer, rating: $rating, thumbnail: $thumbnail")
+                list.add(WebToon(id, name, writer, rating, thumbnail))
             }
+        emit(list)
     }
 }
