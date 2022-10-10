@@ -19,6 +19,9 @@ object Version {
     const val MOSHI = "1.9.3"
     const val OKHTTP = "5.0.0-alpha.7"
     const val JSOUP = "1.15.3"
+
+    const val GLIDE = "4.13.2"
+    const val GLIDE_COMPILER = "4.12.0"
 }
 
 object Library {
@@ -64,5 +67,11 @@ object Library {
         const val OKHTTP = "com.squareup.okhttp3:okhttp:${Version.OKHTTP}"
         const val LOGGING_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor:${Version.OKHTTP}"
         const val JSOUP = "org.jsoup:jsoup:${Version.JSOUP}"
+    }
+
+    object Glide {
+
+        const val GLIDE = "com.github.bumptech.glide:glide:${Version.GLIDE}"
+        const val GLIDE_COMPILER = "com.github.bumptech.glide:compiler:${Version.GLIDE_COMPILER}"
     }
 }

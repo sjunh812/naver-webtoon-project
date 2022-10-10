@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
-import org.sjhstudio.naverwebtoon.repository.WebToonRepositoryImpl
+import org.sjhstudio.naverwebtoon.data.repository.WebToonRepositoryImpl
 import javax.inject.Singleton
 
 @dagger.Module

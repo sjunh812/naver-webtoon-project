@@ -28,7 +28,7 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRes: I
 
     override fun onDestroyView() {
         _binding = null
-        binding.unbind()
+//        binding.unbind()
         super.onDestroyView()
     }
 }
