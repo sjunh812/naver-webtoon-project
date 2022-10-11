@@ -10,10 +10,10 @@ import org.sjhstudio.naverwebtoon.databinding.FragmentDayListBinding
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
-class DayListFragment(private val position: Int, private val viewModel: WeekdayListViewModel) :
+class WeekdayFragment(private val position: Int, private val viewModel: WeekdayListViewModel) :
     BaseFragment<FragmentDayListBinding>(R.layout.fragment_day_list) {
 
-    private val dayListAdapter: DayListAdapter by lazy { DayListAdapter() }
+    private val dayListAdapter: WeekdayAdapter by lazy { WeekdayAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,14 +24,15 @@ class DayListFragment(private val position: Int, private val viewModel: WeekdayL
     private fun initView() {
         with(binding) {
             rvDayList.adapter = dayListAdapter
+
         }
     }
 
     private fun getDayList() {
         with(viewModel) {
             lifecycleScope.launchWhenStarted {
-                getWeekdayList(getWeek() ?: return@launchWhenStarted).collectLatest { list ->
-                    dayListAdapter.submitList(list)
+                weekdayList.collectLatest { map ->
+                    map[getWeek()]?.let { list -> dayListAdapter.submitList(list) }
                 }
             }
         }

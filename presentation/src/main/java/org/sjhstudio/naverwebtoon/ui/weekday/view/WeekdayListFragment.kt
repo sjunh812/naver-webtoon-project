@@ -3,6 +3,9 @@ package org.sjhstudio.naverwebtoon.ui.weekday.view
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.sjhstudio.naverwebtoon.R

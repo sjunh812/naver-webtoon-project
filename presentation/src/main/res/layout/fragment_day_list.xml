@@ -6,6 +6,7 @@
         android:id="@+id/rv_day_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="7dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3" />
 </layout>
