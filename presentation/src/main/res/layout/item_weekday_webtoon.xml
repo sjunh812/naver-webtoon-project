@@ -7,62 +7,75 @@
 
         <variable
             name="webToon"
-            type="org.sjhstudio.naverwebtoon.domain.model.WebToon" />
+            type="org.sjhstudio.naverwebtoon.domain.model.MobileWebToon" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="83dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="180dp"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginTop="10dp"
             app:thumbnailImageUrl="@{webToon.thumbnail}" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:showUpdateBadge="@{webToon.update}"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/view_weekday_badge" />
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{webToon.name}"
             android:textColor="@color/black"
+            android:layout_marginHorizontal="3dp"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_thumbnail"
             tools:text="참교육" />
 
         <TextView
             android:id="@+id/tv_writer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:ellipsize="end"
-            android:maxWidth="50dp"
             android:maxLines="1"
             android:text="@{webToon.writer}"
-            android:textColor="#A9A9A9"
+            android:textColor="#A0A0A0"
             android:textSize="9sp"
+            android:layout_marginHorizontal="3dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
-            tools:text="채용택 / 한가람" />
+            tools:text="문조 " />
 
         <TextView
             android:id="@+id/tv_rating"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:textColor="#A9A9A9"
+            android:textColor="#A0A0A0"
             android:textSize="9sp"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_writer"
-            app:layout_constraintStart_toEndOf="@id/tv_writer"
-            app:rating="@{webToon.rating}"
-            tools:text="★ 9.96" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_writer"
+            android:text="@{webToon.favoriteCount}"
+            tools:text="★ 9.86" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

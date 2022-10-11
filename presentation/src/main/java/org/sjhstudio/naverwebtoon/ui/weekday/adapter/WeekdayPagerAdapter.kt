@@ -2,7 +2,7 @@ package org.sjhstudio.naverwebtoon.ui.weekday.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import org.sjhstudio.naverwebtoon.ui.weekday.view.DayListFragment
+import org.sjhstudio.naverwebtoon.ui.weekday.view.WeekdayFragment
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
 const val MONDAY_INDEX = 0
@@ -17,13 +17,13 @@ class WeekdayPagerAdapter(fragment: Fragment, viewModel: WeekdayListViewModel) :
     FragmentStateAdapter(fragment) {
 
     private val tabFragmentsCreator: Map<Int, () -> Fragment> = mapOf(
-        MONDAY_INDEX to { DayListFragment(MONDAY_INDEX, viewModel) },
-        TUESDAY_INDEX to { DayListFragment(TUESDAY_INDEX, viewModel) },
-        WEDNESDAY_INDEX to { DayListFragment(WEDNESDAY_INDEX, viewModel) },
-        THURSDAY_INDEX to { DayListFragment(THURSDAY_INDEX, viewModel) },
-        FRIDAY_INDEX to { DayListFragment(FRIDAY_INDEX, viewModel) },
-        SATURDAY_INDEX to { DayListFragment(SATURDAY_INDEX, viewModel) },
-        SUNDAY_INDEX to { DayListFragment(SUNDAY_INDEX, viewModel) }
+        MONDAY_INDEX to { WeekdayFragment(MONDAY_INDEX, viewModel) },
+        TUESDAY_INDEX to { WeekdayFragment(TUESDAY_INDEX, viewModel) },
+        WEDNESDAY_INDEX to { WeekdayFragment(WEDNESDAY_INDEX, viewModel) },
+        THURSDAY_INDEX to { WeekdayFragment(THURSDAY_INDEX, viewModel) },
+        FRIDAY_INDEX to { WeekdayFragment(FRIDAY_INDEX, viewModel) },
+        SATURDAY_INDEX to { WeekdayFragment(SATURDAY_INDEX, viewModel) },
+        SUNDAY_INDEX to { WeekdayFragment(SUNDAY_INDEX, viewModel) }
     )
 
     override fun getItemCount(): Int = tabFragmentsCreator.size
