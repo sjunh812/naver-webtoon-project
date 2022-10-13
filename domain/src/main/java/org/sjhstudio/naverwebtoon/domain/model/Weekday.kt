@@ -1,4 +1,4 @@
-package org.sjhstudio.naverwebtoon.data.model
+package org.sjhstudio.naverwebtoon.domain.model
 
 enum class Weekday(
     val english: String,
