@@ -15,31 +15,45 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             android:background="@android:color/transparent"
-            app:elevation="0dp"
-            android:theme="@style/Theme.WebToon.AppBarOverlay">
+            android:fitsSystemWindows="true"
+            android:theme="@style/Theme.WebToon.AppBarOverlay"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:statusBarScrim="@android:color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:toolbarId="@id/toolbar">
+                app:statusBarScrim="@android:color/transparent">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/view_pager_top_banner"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:fitsSystemWindows="true" />
+                    android:layout_gravity="top"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="none" />
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
-                    style="@style/Widget.MaterialComponents.Toolbar.Surface"
                     android:layout_width="match_parent"
-                    android:background="@android:color/transparent"
-                    android:layout_height="?attr/actionBarSize" />
+                    android:layout_height="100dp"
+                    android:layout_gravity="top"
+                    android:background="@drawable/bg_toolbar"
+                    android:fitsSystemWindows="true"
+                    android:visibility="gone"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="요일별 웹툰"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </com.google.android.material.appbar.MaterialToolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -74,39 +88,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_tab" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--        <androidx.core.widget.NestedScrollView-->
-        <!--            android:id="@+id/scroll_view"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:background="@color/white"-->
-        <!--            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
-
-        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
-
-        <!--                <com.google.android.material.tabs.TabLayout-->
-        <!--                    android:id="@+id/layout_tab"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                    app:layout_constraintStart_toStartOf="parent"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent"-->
-        <!--                    app:tabIndicatorColor="@color/naver"-->
-        <!--                    app:tabSelectedTextColor="@color/naver"-->
-        <!--                    app:tabTextColor="@color/black" />-->
-
-        <!--                <androidx.viewpager2.widget.ViewPager2-->
-        <!--                    android:id="@+id/view_pager_weekday_list"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                    app:layout_constraintStart_toStartOf="parent"-->
-        <!--                    app:layout_constraintTop_toBottomOf="@id/layout_tab" />-->
-        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-        <!--        </androidx.core.widget.NestedScrollView>-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

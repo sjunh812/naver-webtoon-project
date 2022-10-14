@@ -64,9 +64,9 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 var frontThumbnail = ""
                 var backThumbnail = ""
                 element.select("div.thumbnail > img").forEach { thumbnailElement ->
-                    if (frontThumbnail.isEmpty()) frontThumbnail =
+                    if (backThumbnail.isEmpty()) backThumbnail =
                         mapperToThumbnail(thumbnailElement.attr("src"))
-                    else backThumbnail = mapperToThumbnail(thumbnailElement.attr("src"))
+                    else if (frontThumbnail.isEmpty()) frontThumbnail = mapperToThumbnail(thumbnailElement.attr("src"))
                 }
                 list.add(
                     NewWebToon(
@@ -80,8 +80,8 @@ internal class WebToonRepositoryImpl @Inject constructor(
                         colorList = colorList
                     )
                 )
+                println("xxx $id $title $frontThumbnail $backThumbnail")
             }
-        println("xxx $list")
         emit(list)
     }
 }
