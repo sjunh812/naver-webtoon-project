@@ -3,9 +3,14 @@ package org.sjhstudio.naverwebtoon.ui.weekday.view
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,6 +25,7 @@ import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayListBinding
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
+import org.sjhstudio.naverwebtoon.util.setStatusBarMode
 
 @AndroidEntryPoint
 class WeekdayListFragment :
@@ -34,8 +40,33 @@ class WeekdayListFragment :
     }
     private val newWebToonAdapter: NewWebToonAdapter by lazy { NewWebToonAdapter() }
 
+    private val toolbarInAnim: Animation by lazy {
+        AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_in)
+    }
+    private val toolbarOutAnim: Animation by lazy {
+        AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_out).apply {
+            setAnimationListener(ToolbarAnimationListener())
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//        super.onViewCreated(view, savedInstanceState)
+//        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
+//            (binding.toolbar.layoutParams as ViewGroup.MarginLayoutParams).topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+//            WindowInsetsCompat.CONSUMED
+//        }\
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
+            // Instead of
+            // toolbar.setPadding(0, insets.systemWindowInsetTop, 0, 0)
+            println("xxx systemsBar top: ${insets.getInsets(WindowInsetsCompat.Type.systemBars())}")
+            binding.toolbar.setPadding(
+                0,
+                insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
+                0,
+                0
+            )
+            WindowInsetsCompat.CONSUMED
+        }
         initView()
         initWebView()
         observeData()
@@ -49,7 +80,16 @@ class WeekdayListFragment :
                 tab.text = getTabTitle(position)
             }.attach()
 
-
+            appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                println("xxx verticalOffset: $verticalOffset")
+                if (verticalOffset != 0 && !toolbar.isVisible) {
+                    setStatusBarMode(requireActivity().window, true)
+                    toolbar.visibility = View.VISIBLE
+                    toolbar.startAnimation(toolbarInAnim)
+                } else if (verticalOffset == 0 && toolbar.isVisible) {
+                    toolbar.startAnimation(toolbarOutAnim)
+                }
+            }
 //            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
 ////                println("xxx scrollY: $scrollY")
 //            }
@@ -86,7 +126,6 @@ class WeekdayListFragment :
             lifecycleScope.launchWhenStarted {
                 newList.collectLatest { list ->
                     list.takeIf { it.isNotEmpty() }?.let { newWebToons ->
-                        println("xxx $newWebToons")
                         newWebToonAdapter.submitList(newWebToons)
                     }
                 }
@@ -103,6 +142,17 @@ class WeekdayListFragment :
         SATURDAY_INDEX -> "토"
         SUNDAY_INDEX -> "일"
         else -> null
+    }
+
+    inner class ToolbarAnimationListener : Animation.AnimationListener {
+        override fun onAnimationStart(p0: Animation?) {}
+
+        override fun onAnimationEnd(p0: Animation?) {
+            setStatusBarMode(requireActivity().window, false)
+            binding.toolbar.isVisible = false
+        }
+
+        override fun onAnimationRepeat(p0: Animation?) {}
     }
 }
 
