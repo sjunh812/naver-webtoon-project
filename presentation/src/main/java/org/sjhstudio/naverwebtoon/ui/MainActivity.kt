@@ -1,17 +1,17 @@
 package org.sjhstudio.naverwebtoon.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.view.WindowCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import org.sjhstudio.naverwebtoon.R
+import org.sjhstudio.naverwebtoon.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
     }
 }

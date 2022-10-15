@@ -52,7 +52,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="아기 볼모가 너무 귀여워" />
+            tools:text="웹툰명" />
 
         <TextView
             android:id="@+id/tv_author"
@@ -68,7 +68,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
-            tools:text="아기 볼모가 너무 귀여워" />
+            tools:text="작가" />
 
         <TextView
             android:id="@+id/tv_summary"
@@ -84,6 +84,6 @@
             app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_author"
-            tools:text="아기 볼모가 너무 귀여워" />
+            tools:text="간단 줄거리" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

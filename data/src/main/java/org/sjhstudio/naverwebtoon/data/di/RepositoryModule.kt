@@ -3,8 +3,8 @@ package org.sjhstudio.naverwebtoon.data.di
 import dagger.Binds
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import org.sjhstudio.naverwebtoon.data.repository.WebToonRepositoryImpl
+import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import javax.inject.Singleton
 
 @dagger.Module
