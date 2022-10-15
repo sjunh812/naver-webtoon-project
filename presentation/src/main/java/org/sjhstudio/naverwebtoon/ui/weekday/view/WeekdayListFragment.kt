@@ -32,12 +32,7 @@ class WeekdayListFragment :
     BaseFragment<FragmentWeekdayListBinding>(R.layout.fragment_weekday_list) {
 
     private val weekdayListViewModel: WeekdayListViewModel by viewModels()
-    private val weekdayPagerAdapter: WeekdayPagerAdapter by lazy {
-        WeekdayPagerAdapter(
-            this,
-            weekdayListViewModel
-        )
-    }
+    private val weekdayPagerAdapter: WeekdayPagerAdapter by lazy { WeekdayPagerAdapter(this) }
     private val newWebToonAdapter: NewWebToonAdapter by lazy { NewWebToonAdapter() }
 
     private val toolbarInAnim: Animation by lazy {
@@ -50,7 +45,7 @@ class WeekdayListFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 //        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
 //            (binding.toolbar.layoutParams as ViewGroup.MarginLayoutParams).topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
 //            WindowInsetsCompat.CONSUMED

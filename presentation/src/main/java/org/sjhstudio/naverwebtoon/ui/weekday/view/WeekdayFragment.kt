@@ -2,29 +2,30 @@ package org.sjhstudio.naverwebtoon.ui.weekday.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collectLatest
 import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentDayListBinding
+import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
-class WeekdayFragment(private val position: Int, private val viewModel: WeekdayListViewModel) :
-    BaseFragment<FragmentDayListBinding>(R.layout.fragment_day_list) {
+class WeekdayFragment : BaseFragment<FragmentDayListBinding>(R.layout.fragment_day_list) {
 
+    private val viewModel: WeekdayListViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private val dayListAdapter: WeekdayAdapter by lazy { WeekdayAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        bind()
         getDayList()
     }
 
-    private fun initView() {
+    private fun bind() {
         with(binding) {
-            rvDayList.adapter = dayListAdapter
-
+            adapter = dayListAdapter
         }
     }
 
@@ -38,14 +39,14 @@ class WeekdayFragment(private val position: Int, private val viewModel: WeekdayL
         }
     }
 
-    private fun getWeek(): String? = when(position) {
-        MONDAY_INDEX -> "mon"
-        TUESDAY_INDEX -> "tue"
-        WEDNESDAY_INDEX -> "wed"
-        THURSDAY_INDEX -> "thu"
-        FRIDAY_INDEX -> "fri"
-        SATURDAY_INDEX -> "sat"
-        SUNDAY_INDEX -> "sun"
+    private fun getWeek(): String? = when (arguments?.getInt(WEEKDAY_INDEX)) {
+        MONDAY_INDEX -> Weekday.MON.english
+        TUESDAY_INDEX -> Weekday.TUE.english
+        WEDNESDAY_INDEX -> Weekday.WED.english
+        THURSDAY_INDEX -> Weekday.THU.english
+        FRIDAY_INDEX -> Weekday.FRI.english
+        SATURDAY_INDEX -> Weekday.SAT.english
+        SUNDAY_INDEX -> Weekday.SUN.english
         else -> null
     }
 }

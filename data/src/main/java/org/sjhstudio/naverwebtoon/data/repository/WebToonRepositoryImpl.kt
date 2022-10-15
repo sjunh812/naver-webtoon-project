@@ -19,8 +19,10 @@ internal class WebToonRepositoryImpl @Inject constructor(
 
     override fun getWeekdayWebToonList(): Flow<Map<String, List<WebToon>>> = flow {
         val map = mutableMapOf<String, List<WebToon>>()
+
         Weekday.values().forEach { weekday ->
             val list = mutableListOf<WebToon>()
+
             Jsoup.parse(mobileApi.getWeekdayList(weekday.english).charStream().readText())
                 .select("ul.list_toon.type2")
                 .select("li.item").forEach Jsoup@{ element ->
@@ -50,6 +52,7 @@ internal class WebToonRepositoryImpl @Inject constructor(
 
     override fun getNewWebToonList(html: String): Flow<List<NewWebToon>> = flow {
         val list = mutableListOf<NewWebToon>()
+
         Jsoup.parse(html)
             .select("div.section_new_webtoon")
             .select("div.eg-flick-panel").forEach { element ->
@@ -66,7 +69,8 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 element.select("div.thumbnail > img").forEach { thumbnailElement ->
                     if (backThumbnail.isEmpty()) backThumbnail =
                         mapperToThumbnail(thumbnailElement.attr("src"))
-                    else if (frontThumbnail.isEmpty()) frontThumbnail = mapperToThumbnail(thumbnailElement.attr("src"))
+                    else if (frontThumbnail.isEmpty()) frontThumbnail =
+                        mapperToThumbnail(thumbnailElement.attr("src"))
                 }
                 list.add(
                     NewWebToon(
@@ -80,7 +84,6 @@ internal class WebToonRepositoryImpl @Inject constructor(
                         colorList = colorList
                     )
                 )
-                println("xxx $id $title $frontThumbnail $backThumbnail")
             }
         emit(list)
     }

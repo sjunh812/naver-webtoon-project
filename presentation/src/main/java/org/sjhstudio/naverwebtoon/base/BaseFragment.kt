@@ -22,13 +22,13 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRes: I
         savedInstanceState: Bundle?
     ): View {
         _binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onDestroyView() {
+        binding.unbind()
         _binding = null
-//        binding.unbind()
         super.onDestroyView()
     }
 }

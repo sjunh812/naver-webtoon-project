@@ -2,11 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="adapter"
+            type="org.sjhstudio.naverwebtoon.ui.weekday.adapter.WeekdayAdapter" />
+    </data>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_day_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="7dp"
+        app:adapter="@{adapter}"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3" />
 </layout>
