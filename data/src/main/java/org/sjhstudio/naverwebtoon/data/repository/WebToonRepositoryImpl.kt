@@ -67,10 +67,9 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 var frontThumbnail = ""
                 var backThumbnail = ""
                 element.select("div.thumbnail > img").forEach { thumbnailElement ->
-                    if (backThumbnail.isEmpty()) backThumbnail =
-                        mapperToThumbnail(thumbnailElement.attr("src"))
-                    else if (frontThumbnail.isEmpty()) frontThumbnail =
-                        mapperToThumbnail(thumbnailElement.attr("src"))
+                    val originUrl = thumbnailElement.attr("src")
+                    if (originUrl.contains("backImage")) backThumbnail = mapperToThumbnail(originUrl)
+                    else if (originUrl.contains("frontImage")) frontThumbnail = mapperToThumbnail(originUrl)
                 }
                 list.add(
                     NewWebToon(

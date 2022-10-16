@@ -8,6 +8,8 @@ import android.view.animation.AnimationUtils
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -36,24 +38,35 @@ class WeekdayListFragment :
     private val newWebToonAdapter: NewWebToonAdapter by lazy { NewWebToonAdapter() }
 
     private val toolbarInAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_in)
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.toolbar_in
+        )
     }
     private val toolbarOutAnim: Animation by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_out).apply {
             setAnimationListener(ToolbarAnimationListener())
         }
     }
+    private val frontThumbnailAnim: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.front_thumbnail
+        )
+    }
+    private val backThumbnailAnim: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.back_thumbnail
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
-//            (binding.toolbar.layoutParams as ViewGroup.MarginLayoutParams).topMargin = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-//            WindowInsetsCompat.CONSUMED
-//        }\
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
             // Instead of
             // toolbar.setPadding(0, insets.systemWindowInsetTop, 0, 0)
-            println("xxx systemsBar top: ${insets.getInsets(WindowInsetsCompat.Type.systemBars())}")
+            println("xxx SystemBar insects: ${insets.getInsets(WindowInsetsCompat.Type.systemBars())}")
             binding.toolbar.setPadding(
                 0,
                 insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
@@ -69,25 +82,47 @@ class WeekdayListFragment :
 
     private fun initView() {
         with(binding) {
-            viewPagerWeekdayList.adapter = weekdayPagerAdapter
-            viewPagerTopBanner.adapter = newWebToonAdapter
             TabLayoutMediator(layoutTab, viewPagerWeekdayList) { tab, position ->
                 tab.text = getTabTitle(position)
             }.attach()
-
-            appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                println("xxx verticalOffset: $verticalOffset")
+            appBar.addOnOffsetChangedListener { _, verticalOffset ->
                 if (verticalOffset != 0 && !toolbar.isVisible) {
-                    setStatusBarMode(requireActivity().window, true)
-                    toolbar.visibility = View.VISIBLE
+                    toolbar.isVisible = true
                     toolbar.startAnimation(toolbarInAnim)
+                    setStatusBarMode(
+                        window = requireActivity().window,
+                        isLightMode = true
+                    )
                 } else if (verticalOffset == 0 && toolbar.isVisible) {
                     toolbar.startAnimation(toolbarOutAnim)
                 }
             }
-//            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-////                println("xxx scrollY: $scrollY")
-//            }
+            viewPagerWeekdayList.adapter = weekdayPagerAdapter
+            viewPagerTopBanner.apply {
+                adapter = newWebToonAdapter
+                offscreenPageLimit = 1
+                setPageTransformer { page, position ->
+                    val title = page.findViewById<TextView>(R.id.tv_title).text
+                    val frontThumbnail = page.findViewById<ImageView>(R.id.iv_front_thumbnail)
+                    val backThumbnail = page.findViewById<ImageView>(R.id.iv_back_thumbnail)
+                    if (position <= 0.5 && position > 0) {
+                        if (!frontThumbnail.isVisible && !backThumbnail.isVisible) {
+                            frontThumbnail.startAnimation(frontThumbnailAnim)
+                            backThumbnail.startAnimation(backThumbnailAnim)
+                        }
+                        backThumbnail.isVisible = true
+                        frontThumbnail.isVisible = true
+                    } else if (position > 0.5 && position < 1 || title.isEmpty()) {
+                        backThumbnail.isVisible = false
+                        frontThumbnail.isVisible = false
+                    } else {
+                        backThumbnail.isVisible = true
+                        frontThumbnail.isVisible = true
+                    }
+
+                    println("xxx Page transformer: $title - $position")
+                }
+            }
         }
     }
 
