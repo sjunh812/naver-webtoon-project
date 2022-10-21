@@ -11,7 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import org.sjhstudio.naverwebtoon.util.dpToPx
 
-@BindingAdapter("thumbnailImageUrl")
+@BindingAdapter("thumbnailImageFromUrl")
 fun ImageView.bindThumbnailImageUrl(url: String?) {
     if (!url.isNullOrEmpty()) {
         Glide.with(context)
@@ -20,6 +20,15 @@ fun ImageView.bindThumbnailImageUrl(url: String?) {
             .override(context.dpToPx(138), context.dpToPx(180))
             .into(this)
     }
+}
+
+@BindingAdapter("newWebToonImageFromUrl")
+fun ImageView.bindNewWebToonImageUrl(url: String?) {
+    if (!url.isNullOrEmpty()) {
+        Glide.with(context)
+            .load(url)
+            .into(this)
+    } else setImageResource(0)
 }
 
 @BindingAdapter("showUpdateBadge")

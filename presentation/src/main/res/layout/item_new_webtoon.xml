@@ -19,25 +19,25 @@
             android:id="@+id/iv_background_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            app:imageFromUrl="@{newWebToon.backgroundThumbnail}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:newWebToonImageFromUrl="@{newWebToon.backgroundThumbnail}" />
 
         <ImageView
             android:id="@+id/iv_back_thumbnail"
-            android:layout_width="wrap_content"
+            android:layout_width="220dp"
             android:layout_height="170dp"
-            app:imageFromUrl="@{newWebToon.backThumbnail}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:newWebToonImageFromUrl="@{newWebToon.backThumbnail}" />
 
         <ImageView
             android:id="@+id/iv_front_thumbnail"
-            android:layout_width="wrap_content"
+            android:layout_width="220dp"
             android:layout_height="170dp"
-            app:imageFromUrl="@{newWebToon.frontThumbnail}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:newWebToonImageFromUrl="@{newWebToon.frontThumbnail}" />
 
         <TextView
             android:id="@+id/tv_title"

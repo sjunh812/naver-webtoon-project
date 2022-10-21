@@ -18,34 +18,34 @@
             android:id="@+id/iv_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="3dp"
             android:layout_marginTop="10dp"
-            app:thumbnailImageUrl="@{webToon.thumbnail}" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:thumbnailImageFromUrl="@{webToon.thumbnail}" />
 
         <View
             android:layout_width="10dp"
             android:layout_height="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:showUpdateBadge="@{webToon.updated}"
             android:layout_marginTop="15dp"
-            android:background="@drawable/view_weekday_badge" />
+            android:background="@drawable/view_weekday_badge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:showUpdateBadge="@{webToon.updated}" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{webToon.title}"
             android:textColor="@color/black"
-            android:layout_marginHorizontal="3dp"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_thumbnail"
             tools:text="참교육" />
 
@@ -53,14 +53,14 @@
             android:id="@+id/tv_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{webToon.author}"
             android:textColor="#A0A0A0"
             android:textSize="9sp"
-            android:layout_marginHorizontal="3dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             tools:text="문조 " />
 
@@ -68,14 +68,14 @@
             android:id="@+id/tv_rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="10dp"
+            android:text="@{webToon.favoriteCount}"
             android:textColor="#A0A0A0"
             android:textSize="9sp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginHorizontal="3dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_author"
-            android:text="@{webToon.favoriteCount}"
             tools:text="★ 9.86" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

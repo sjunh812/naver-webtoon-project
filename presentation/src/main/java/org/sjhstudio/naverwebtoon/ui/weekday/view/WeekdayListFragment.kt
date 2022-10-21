@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +29,7 @@ import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayListBinding
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 import org.sjhstudio.naverwebtoon.util.setStatusBarMode
+import kotlin.math.round
 
 @AndroidEntryPoint
 class WeekdayListFragment :
@@ -82,9 +84,6 @@ class WeekdayListFragment :
 
     private fun initView() {
         with(binding) {
-            TabLayoutMediator(layoutTab, viewPagerWeekdayList) { tab, position ->
-                tab.text = getTabTitle(position)
-            }.attach()
             appBar.addOnOffsetChangedListener { _, verticalOffset ->
                 if (verticalOffset != 0 && !toolbar.isVisible) {
                     toolbar.isVisible = true
@@ -100,29 +99,43 @@ class WeekdayListFragment :
             viewPagerWeekdayList.adapter = weekdayPagerAdapter
             viewPagerTopBanner.apply {
                 adapter = newWebToonAdapter
-                offscreenPageLimit = 1
                 setPageTransformer { page, position ->
                     val title = page.findViewById<TextView>(R.id.tv_title).text
                     val frontThumbnail = page.findViewById<ImageView>(R.id.iv_front_thumbnail)
                     val backThumbnail = page.findViewById<ImageView>(R.id.iv_back_thumbnail)
-                    if (position <= 0.5 && position > 0) {
+
+                    if (position > 0 && position <= 0.5) {
                         if (!frontThumbnail.isVisible && !backThumbnail.isVisible) {
                             frontThumbnail.startAnimation(frontThumbnailAnim)
                             backThumbnail.startAnimation(backThumbnailAnim)
+                            frontThumbnail.isVisible = true
+                            backThumbnail.isVisible = true
+                            println("xxx Animation start: $position - $title")
+                        } else {
+                            println("xxx Animation already started: $position - $title")
                         }
-                        backThumbnail.isVisible = true
-                        frontThumbnail.isVisible = true
-                    } else if (position > 0.5 && position < 1 || title.isEmpty()) {
-                        backThumbnail.isVisible = false
+                    } else if (position > 0.5) {
                         frontThumbnail.isVisible = false
-                    } else {
-                        backThumbnail.isVisible = true
+                        backThumbnail.isVisible = false
+                        println("xxx Animation start yet: $position - $title")
+                    } else if (position < 0) {
                         frontThumbnail.isVisible = true
+                        backThumbnail.isVisible = true
+                        frontThumbnail.clearAnimation()
+                        backThumbnail.clearAnimation()
+                        println("xxx Animation clear: $position - $title")
+                    } else {
+                        if (title.isEmpty()) {
+                            frontThumbnail.startAnimation(frontThumbnailAnim)
+                            backThumbnail.startAnimation(backThumbnailAnim)
+                            println("xxx Init: $position - $title")
+                        }
                     }
-
-                    println("xxx Page transformer: $title - $position")
                 }
             }
+            TabLayoutMediator(layoutTab, viewPagerWeekdayList) { tab, position ->
+                tab.text = getTabTitle(position)
+            }.attach()
         }
     }
 
