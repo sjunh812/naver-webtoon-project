@@ -67,13 +67,24 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/layout_tab"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabIndicatorColor="@color/naver"
+                app:tabIndicatorFullWidth="false"
                 app:tabSelectedTextColor="@color/naver"
+                app:tabTextAppearance="@style/TextAppearance.TabLayout"
                 app:tabTextColor="@color/black" />
+
+            <View
+                android:id="@+id/divider_tab"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#E2E2E2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_tab" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager_weekday_list"
@@ -82,7 +93,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_tab" />
+                app:layout_constraintTop_toBottomOf="@id/divider_tab" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

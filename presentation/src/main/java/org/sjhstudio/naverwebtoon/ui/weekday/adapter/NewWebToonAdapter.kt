@@ -35,9 +35,11 @@ class NewWebToonAdapter :
     }
 
     override fun onBindViewHolder(holder: NewWebToonViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = getItem(position % currentList.size)
         item?.let { holder.bind(it) }
     }
+
+    override fun getItemCount() = Int.MAX_VALUE
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<NewWebToon>() {

@@ -33,14 +33,6 @@ class WeekdayListViewModel @Inject constructor(
             .collectLatest { map -> _weekdayList.emit(map) }
     }
 
-//    private fun getNewWebToonList() = viewModelScope.launch {
-//        repository.getNewWebToonList()
-//            .onStart { }
-//            .onCompletion { }
-//            .catch { e -> e.printStackTrace() }
-//            .collectLatest { map -> }
-//    }
-
     fun getNewWebToonList(html: String) = viewModelScope.launch {
         repository.getNewWebToonList(html)
             .onStart { }

@@ -22,6 +22,8 @@ object Version {
 
     const val GLIDE = "4.13.2"
     const val GLIDE_COMPILER = "4.12.0"
+
+    const val JODA_TIME = "2.12.0"
 }
 
 object Library {
@@ -73,5 +75,10 @@ object Library {
 
         const val GLIDE = "com.github.bumptech.glide:glide:${Version.GLIDE}"
         const val GLIDE_COMPILER = "com.github.bumptech.glide:compiler:${Version.GLIDE_COMPILER}"
+    }
+
+    object DateTime {
+
+        const val JODA_TIME = "joda-time:joda-time:${Version.JODA_TIME}"
     }
 }
