@@ -18,7 +18,7 @@ fun mapperToThumbnail(originUrl: String) =
         "shared-comic.pstatic.net/thumb"
     )
 
-fun mapperToColor(rgb: String): List<Int> {
+fun mapperToNewWebToonColor(rgb: String): List<Int> {
     val list = mutableListOf<Int>()
     try {
         rgb.substring(16, rgb.length - 2).split(",").forEach { codeStr ->
@@ -29,4 +29,8 @@ fun mapperToColor(rgb: String): List<Int> {
         e.printStackTrace()
     }
     return list
+}
+
+fun mapperToWebToonInfoColor(style: String): String {
+    return style.substring(17, 24)
 }

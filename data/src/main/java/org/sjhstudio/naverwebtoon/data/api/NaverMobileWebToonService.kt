@@ -8,4 +8,12 @@ internal interface NaverMobileWebToonService {
 
     @GET("weekday")
     suspend fun getWeekdayList(@Query("week") week: String): ResponseBody
+
+    @GET("list")
+    suspend fun getEpisodeList(
+        @Query("titleId") titleId: Long,
+        @Query("week") week: String,
+        @Query("page") page: Int = 1,
+        @Query("sortOrder") sortOrder: String = "DESC"
+    ): ResponseBody
 }

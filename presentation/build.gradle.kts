@@ -52,6 +52,7 @@ dependencies {
     implementation(Library.AndroidX.CONSTRAINT_LAYOUT)
     implementation(Library.AndroidX.NAVIGATION_RUNTIME)
     implementation(Library.AndroidX.NAVIGATION_FRAGMENT)
+    implementation(Library.AndroidX.NAVIGATION_UI)
     androidTestImplementation(Library.AndroidX.ANDROID_JUNIT)
     androidTestImplementation(Library.AndroidX.ESPRESSO)
 
