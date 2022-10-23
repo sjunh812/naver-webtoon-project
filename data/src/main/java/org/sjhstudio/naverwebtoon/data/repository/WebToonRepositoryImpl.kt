@@ -4,11 +4,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jsoup.Jsoup
 import org.sjhstudio.naverwebtoon.data.api.NaverMobileWebToonService
-import org.sjhstudio.naverwebtoon.data.mapperToColor
+import org.sjhstudio.naverwebtoon.data.mapperToNewWebToonColor
 import org.sjhstudio.naverwebtoon.data.mapperToThumbnail
 import org.sjhstudio.naverwebtoon.data.mapperToWebToonId
+import org.sjhstudio.naverwebtoon.data.mapperToWebToonInfoColor
 import org.sjhstudio.naverwebtoon.domain.model.NewWebToon
 import org.sjhstudio.naverwebtoon.domain.model.WebToon
+import org.sjhstudio.naverwebtoon.domain.model.WebToonInfo
 import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import javax.inject.Inject
@@ -61,15 +63,17 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 val title = element.select("strong.title").text()
                 val author = element.select("span.author").text()
                 val summary = element.select("p.summary").text()
-                val colorList = mapperToColor(element.select("a").attr("style"))
+                val colorList = mapperToNewWebToonColor(element.select("a").attr("style"))
                 val backgroundThumbnail =
                     mapperToThumbnail(element.select("div.thumb_bg > img").attr("src"))
                 var frontThumbnail = ""
                 var backThumbnail = ""
                 element.select("div.thumbnail > img").forEach { thumbnailElement ->
                     val originUrl = thumbnailElement.attr("src")
-                    if (originUrl.contains("backImage")) backThumbnail = mapperToThumbnail(originUrl)
-                    else if (originUrl.contains("frontImage")) frontThumbnail = mapperToThumbnail(originUrl)
+                    if (originUrl.contains("backImage")) backThumbnail =
+                        mapperToThumbnail(originUrl)
+                    else if (originUrl.contains("frontImage")) frontThumbnail =
+                        mapperToThumbnail(originUrl)
                 }
                 list.add(
                     NewWebToon(
@@ -85,5 +89,44 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 )
             }
         emit(list)
+    }
+
+    override fun getWebToonInfo(titleId: Long, week: String): Flow<WebToonInfo> = flow {
+        println("xxx ?")
+        val rootElement =
+            Jsoup.parse(mobileApi.getEpisodeList(titleId, week).charStream().readText())
+                .select("div.section_toon_info")
+        val infoElement = rootElement.select("div.area_info")
+        val infoBackElement = rootElement.select("div.info_back")
+        val thumbnailElement = rootElement.select("div.area_thumbnail")
+        var frontThumbnail = ""
+        var backThumbnail = ""
+
+        thumbnailElement.select("img").forEach { element ->
+            val url = element.attr("src")
+            if (url.contains("backImage")) backThumbnail = mapperToThumbnail(url)
+            else if (url.contains("frontImage")) frontThumbnail = mapperToThumbnail(url)
+        }
+
+        val webToonInfo = WebToonInfo(
+            id = titleId,
+            summary = infoElement.select("span.summary").text(),
+            title = infoElement.select("strong.title").text(),
+            author = infoElement.select("span.author").text(),
+            score = infoElement.select("span.score").text(),
+            favCount = infoElement.select("span.favcount").text(),
+            backImageUrl = backThumbnail,
+            frontImageUrl = frontThumbnail,
+            backgroundImageUrl = thumbnailElement.select("div.thumb_bg img").attr("src"),
+            genre = infoBackElement.select("div.genre span.length").text(),
+            genreDetail = infoBackElement.select("div.genre ul.property.list_detail li").text(),
+            weekday = infoBackElement.select("div.week_day ul.list_detail li").text(),
+            age = infoBackElement.select("ul.property.list_detail.age li").text(),
+            summaryDetail = infoBackElement.select("div.summary > p").text(),
+            color = mapperToWebToonInfoColor(rootElement.attr("style"))
+        )
+
+        println("xxx webToonInfo: $webToonInfo")
+        emit(webToonInfo)
     }
 }

@@ -1,5 +1,6 @@
 package org.sjhstudio.naverwebtoon.ui.weekday.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -9,13 +10,25 @@ import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentDayListBinding
 import org.sjhstudio.naverwebtoon.domain.model.Weekday
+import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity
+import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
+import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.WEEKDAY
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
 class WeekdayFragment : BaseFragment<FragmentDayListBinding>(R.layout.fragment_day_list) {
 
     private val viewModel: WeekdayListViewModel by viewModels(ownerProducer = { requireParentFragment() })
-    private val dayListAdapter: WeekdayAdapter by lazy { WeekdayAdapter() }
+    private val dayListAdapter: WeekdayAdapter by lazy {
+        WeekdayAdapter { id ->
+            getWeek()
+            val intent = Intent(requireContext(), EpisodeListActivity::class.java).apply {
+                putExtra(WEEKDAY, getWeek())
+                putExtra(TITLE_ID, id)
+            }
+            startActivity(intent)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
