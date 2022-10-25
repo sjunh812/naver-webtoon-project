@@ -2,6 +2,7 @@ package org.sjhstudio.naverwebtoon.ui.weekday.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -19,13 +20,14 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.joda.time.DateTime
 import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayListBinding
-import org.sjhstudio.naverwebtoon.domain.model.NewWebToon
+import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 import org.sjhstudio.naverwebtoon.util.setCurrentItemWithDuration
@@ -39,13 +41,8 @@ class WeekdayListFragment :
     private val weekdayPagerAdapter: WeekdayPagerAdapter by lazy { WeekdayPagerAdapter(this) }
     private val newWebToonAdapter: NewWebToonAdapter by lazy { NewWebToonAdapter() }
 
-    private var topBannerScrollJob: Job? = null
-
     private val toolbarInAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(
-            requireContext(),
-            R.anim.toolbar_in
-        )
+        AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_in)
     }
     private val toolbarOutAnim: Animation by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_out).apply {
@@ -53,24 +50,17 @@ class WeekdayListFragment :
         }
     }
     private val frontThumbnailAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(
-            requireContext(),
-            R.anim.front_thumbnail
-        )
+        AnimationUtils.loadAnimation(requireContext(), R.anim.front_thumbnail)
     }
     private val backThumbnailAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(
-            requireContext(),
-            R.anim.back_thumbnail
-        )
+        AnimationUtils.loadAnimation(requireContext(), R.anim.back_thumbnail)
     }
+
+    private var topBannerScrollJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
-            // Instead of
-            // toolbar.setPadding(0, insets.systemWindowInsetTop, 0, 0)
-            println("xxx SystemBar insects: ${insets.getInsets(WindowInsetsCompat.Type.systemBars())}")
             binding.toolbar.setPadding(
                 0,
                 insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
@@ -82,8 +72,6 @@ class WeekdayListFragment :
         initView()
         initWebView()
         observeData()
-
-        println("xxx 오늘 요일: ${DateTime().dayOfWeek}")
     }
 
     private fun initView() {
@@ -121,22 +109,23 @@ class WeekdayListFragment :
 
                 override fun onPageCommitVisible(view: WebView?, url: String?) {
                     super.onPageCommitVisible(view, url)
-                    view?.pageDown(true)
+                    Log.e("debug", "onPageCommitVisible()")
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(500)
-                        view?.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);")
+                    Log.e("debug", "onPageFinished()")
+                    lifecycleScope.launchWhenStarted {
+                        delay(1000)
+                        binding.webView.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);")
                     }
                 }
             }
+            loadUrl("https://m.comic.naver.com/")
         }
-        binding.webView.loadUrl("https://m.comic.naver.com/index")
     }
 
-    private fun initTopBannerViewPager(list: List<NewWebToon>) {
+    private fun initTopBannerViewPager(list: List<NewWebtoon>) {
         with(binding.viewPagerTopBanner) {
             adapter = newWebToonAdapter
             setCurrentItem(
@@ -150,53 +139,35 @@ class WeekdayListFragment :
 
                 if (position > 0 && position <= 0.5) {
                     if (!frontThumbnail.isVisible && !backThumbnail.isVisible) {
-                        frontThumbnail.startAnimation(frontThumbnailAnim)
-                        backThumbnail.startAnimation(backThumbnailAnim)
-                        frontThumbnail.isVisible = true
-                        backThumbnail.isVisible = true
                         println("xxx Animation start: $position - $title")
+                        handleThumbnailAnimation(frontThumbnail, backThumbnail, true)
+                        handleThumbnailVisible(frontThumbnail, backThumbnail, true)
                     } else {
                         println("xxx Animation already started: $position - $title")
                     }
                 } else if (position > 0.5) {
-                    frontThumbnail.isVisible = false
-                    backThumbnail.isVisible = false
                     println("xxx Animation start yet: $position - $title")
+                    handleThumbnailVisible(frontThumbnail, backThumbnail, false)
                 } else if (position < 0) {
-                    frontThumbnail.isVisible = true
-                    backThumbnail.isVisible = true
-                    frontThumbnail.clearAnimation()
-                    backThumbnail.clearAnimation()
                     println("xxx Animation clear: $position - $title")
+                    handleThumbnailVisible(frontThumbnail, backThumbnail, true)
+                    handleThumbnailAnimation(frontThumbnail, backThumbnail, false)
                 } else {
                     if (title.isEmpty()) {
-                        frontThumbnail.startAnimation(frontThumbnailAnim)
-                        backThumbnail.startAnimation(backThumbnailAnim)
                         println("xxx Init: $position - $title")
+                        handleThumbnailAnimation(frontThumbnail, backThumbnail, true)
                         createTopBannerScrollJob()
                     }
                 }
             }
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
 
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    println("xxx onPageSelected(): $position")
-                }
-
                 override fun onPageScrollStateChanged(state: Int) {
                     super.onPageScrollStateChanged(state)
                     when (state) {
-                        ViewPager2.SCROLL_STATE_IDLE -> {
-                            println("xxx scroll idle")
-                            createTopBannerScrollJob()
-                        }
-                        ViewPager2.SCROLL_STATE_DRAGGING -> {
-                            println("xxx scroll dragging")
-                        }
-                        ViewPager2.SCROLL_STATE_SETTLING -> {
-                            println("xxx scroll settling")
-                        }
+                        ViewPager2.SCROLL_STATE_IDLE -> createTopBannerScrollJob()
+                        ViewPager2.SCROLL_STATE_DRAGGING -> {}
+                        ViewPager2.SCROLL_STATE_SETTLING -> {}
                     }
                 }
             })
@@ -213,6 +184,21 @@ class WeekdayListFragment :
                     }
                 }
             }
+        }
+    }
+
+    private fun handleThumbnailVisible(frontThumb: View, backThumb: View, visible: Boolean) {
+        frontThumb.isVisible = visible
+        backThumb.isVisible = visible
+    }
+
+    private fun handleThumbnailAnimation(frontThumb: View, backThumb: View, start: Boolean) {
+        if (start) {
+            frontThumb.startAnimation(frontThumbnailAnim)
+            backThumb.startAnimation(backThumbnailAnim)
+        } else {
+            frontThumb.clearAnimation()
+            backThumb.clearAnimation()
         }
     }
 
@@ -239,6 +225,7 @@ class WeekdayListFragment :
     }
 
     inner class ToolbarAnimationListener : Animation.AnimationListener {
+
         override fun onAnimationStart(p0: Animation?) {}
 
         override fun onAnimationEnd(p0: Animation?) {
@@ -254,6 +241,7 @@ private class WebToonJavascriptInterface(private val viewModel: WeekdayListViewM
 
     @JavascriptInterface
     fun getHtml(html: String) {
+        Log.e("debug", "html length: ${html.length}")
         viewModel.getNewWebToonList(html)
     }
 }

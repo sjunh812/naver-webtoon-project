@@ -13,29 +13,26 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.WebToon.AppBarOverlay"
-            app:elevation="0dp">
+            android:theme="@style/Theme.NaverWebtoon.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:statusBarScrim="@android:color/transparent">
+                app:statusBarScrim="@android:color/transparent"
+                app:titleEnabled="false">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/view_pager_top_banner"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_gravity="top"
-                    android:fitsSystemWindows="true"
-                    app:layout_collapseMode="none" />
+                    android:fitsSystemWindows="true" />
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_gravity="top"
                     android:background="@drawable/bg_toolbar"
                     android:fitsSystemWindows="true"
                     android:visibility="gone"
@@ -43,12 +40,12 @@
                     app:layout_collapseMode="pin">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_toolbar_title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="요일별 웹툰"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/label_weekday_webtoon"
+                        android:textAppearance="@style/TextAppearance.Toolbar" />
                 </com.google.android.material.appbar.MaterialToolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -74,14 +71,13 @@
                 app:tabIndicatorColor="@color/naver"
                 app:tabIndicatorFullWidth="false"
                 app:tabSelectedTextColor="@color/naver"
-                app:tabTextAppearance="@style/TextAppearance.TabLayout"
-                app:tabTextColor="@color/black" />
+                app:tabTextAppearance="@style/TextAppearance.TabLayout" />
 
             <View
                 android:id="@+id/divider_tab"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="#E2E2E2"
+                android:background="@color/gray_e2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_tab" />

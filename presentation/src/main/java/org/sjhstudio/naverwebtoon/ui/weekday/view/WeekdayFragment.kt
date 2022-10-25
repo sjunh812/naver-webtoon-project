@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collectLatest
 import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseFragment
-import org.sjhstudio.naverwebtoon.databinding.FragmentDayListBinding
+import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayBinding
 import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
@@ -16,7 +16,7 @@ import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
-class WeekdayFragment : BaseFragment<FragmentDayListBinding>(R.layout.fragment_day_list) {
+class WeekdayFragment : BaseFragment<FragmentWeekdayBinding>(R.layout.fragment_weekday) {
 
     private val viewModel: WeekdayListViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private val dayListAdapter: WeekdayAdapter by lazy {

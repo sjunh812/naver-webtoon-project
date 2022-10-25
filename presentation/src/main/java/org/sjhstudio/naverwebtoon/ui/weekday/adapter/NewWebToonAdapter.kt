@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sjhstudio.naverwebtoon.databinding.ItemNewWebtoonBinding
-import org.sjhstudio.naverwebtoon.domain.model.NewWebToon
+import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.util.getStatusBarHeight
 
 class NewWebToonAdapter :
-    ListAdapter<NewWebToon, NewWebToonAdapter.NewWebToonViewHolder>(diffCallback) {
+    ListAdapter<NewWebtoon, NewWebToonAdapter.NewWebToonViewHolder>(diffCallback) {
 
     class NewWebToonViewHolder(private val binding: ItemNewWebtoonBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -21,9 +21,9 @@ class NewWebToonAdapter :
             }
         }
 
-        fun bind(data: NewWebToon) {
+        fun bind(data: NewWebtoon) {
             with(binding) {
-                newWebToon = data
+                newWebtoon = data
             }
         }
     }
@@ -42,12 +42,12 @@ class NewWebToonAdapter :
     override fun getItemCount() = Int.MAX_VALUE
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<NewWebToon>() {
-            override fun areItemsTheSame(oldItem: NewWebToon, newItem: NewWebToon): Boolean {
+        private val diffCallback = object : DiffUtil.ItemCallback<NewWebtoon>() {
+            override fun areItemsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: NewWebToon, newItem: NewWebToon): Boolean {
+            override fun areContentsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon): Boolean {
                 return oldItem == newItem
             }
         }

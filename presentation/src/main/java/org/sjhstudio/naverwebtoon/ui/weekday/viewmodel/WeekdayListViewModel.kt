@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.sjhstudio.naverwebtoon.domain.model.NewWebToon
-import org.sjhstudio.naverwebtoon.domain.model.WebToon
+import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
+import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import javax.inject.Inject
 
@@ -15,10 +15,10 @@ class WeekdayListViewModel @Inject constructor(
     private val repository: WebToonRepository
 ) : ViewModel() {
 
-    private var _weekdayList = MutableStateFlow<Map<String, List<WebToon>>>(emptyMap())
+    private var _weekdayList = MutableStateFlow<Map<String, List<WeekdayWebtoon>>>(emptyMap())
     val weekdayList = _weekdayList.asStateFlow()
 
-    private var _newList = MutableStateFlow<List<NewWebToon>>(emptyList())
+    private var _newList = MutableStateFlow<List<NewWebtoon>>(emptyList())
     val newList = _newList.asStateFlow()
 
     init {
