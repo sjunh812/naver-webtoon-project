@@ -2,16 +2,15 @@ package org.sjhstudio.naverwebtoon.ui.weekday.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sjhstudio.naverwebtoon.databinding.ItemWeekdayWebtoonBinding
-import org.sjhstudio.naverwebtoon.domain.model.WebToon
+import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
 
 class WeekdayAdapter(
     private val onClicked: (id: Long) -> Unit
-) : ListAdapter<WebToon, WeekdayAdapter.DayListViewHolder>(diffCallback) {
+) : ListAdapter<WeekdayWebtoon, WeekdayAdapter.DayListViewHolder>(diffCallback) {
 
     inner class DayListViewHolder(private val binding: ItemWeekdayWebtoonBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -26,9 +25,9 @@ class WeekdayAdapter(
             }
         }
 
-        fun bind(data: WebToon) {
+        fun bind(data: WeekdayWebtoon) {
             with(binding) {
-                webToon = data
+                webtoon = data
             }
         }
     }
@@ -45,14 +44,14 @@ class WeekdayAdapter(
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<WebToon>() {
-            override fun areItemsTheSame(oldItem: WebToon, newItem: WebToon): Boolean {
+        private val diffCallback = object : DiffUtil.ItemCallback<WeekdayWebtoon>() {
+            override fun areItemsTheSame(oldItem: WeekdayWebtoon, newItem: WeekdayWebtoon): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: WebToon,
-                newItem: WebToon
+                oldItem: WeekdayWebtoon,
+                newItem: WeekdayWebtoon
             ): Boolean {
                 return oldItem == newItem
             }

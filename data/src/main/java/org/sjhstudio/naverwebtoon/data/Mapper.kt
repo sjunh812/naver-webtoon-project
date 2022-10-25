@@ -18,6 +18,7 @@ fun mapperToThumbnail(originUrl: String) =
         "shared-comic.pstatic.net/thumb"
     )
 
+// 신작 웹툰 배너 색상
 fun mapperToNewWebToonColor(rgb: String): List<Int> {
     val list = mutableListOf<Int>()
     try {
@@ -31,6 +32,11 @@ fun mapperToNewWebToonColor(rgb: String): List<Int> {
     return list
 }
 
+// 웹툰 정보 색상
 fun mapperToWebToonInfoColor(style: String): String {
-    return style.substring(17, 24)
+    return try {
+        style.substring(17, 24)
+    } catch (e: Exception) {
+        "#FFFFFF"
+    }
 }

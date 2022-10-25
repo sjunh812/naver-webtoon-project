@@ -1,6 +1,6 @@
 package org.sjhstudio.naverwebtoon.domain.model
 
-data class NewWebToon(
+data class NewWebtoon(
     val id: Long,
     val title: String,
     val author: String,

@@ -51,10 +51,19 @@ fun ViewPager2.setCurrentItemWithDuration(
     }
 
     animator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) { beginFakeDrag() }
-        override fun onAnimationEnd(animation: Animator?) { endFakeDrag() }
-        override fun onAnimationCancel(animation: Animator?) { /* Ignored */ }
-        override fun onAnimationRepeat(animation: Animator?) { /* Ignored */ }
+        override fun onAnimationStart(animation: Animator?) {
+            beginFakeDrag()
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            endFakeDrag()
+        }
+
+        override fun onAnimationCancel(animation: Animator?) { /* Ignored */
+        }
+
+        override fun onAnimationRepeat(animation: Animator?) { /* Ignored */
+        }
     })
 
     animator.interpolator = interpolator
