@@ -3,7 +3,7 @@ package org.sjhstudio.naverwebtoon.domain.repository
 import kotlinx.coroutines.flow.Flow
 import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
-import org.sjhstudio.naverwebtoon.domain.model.WebToonInfo
+import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
 
 interface WebToonRepository {
 
@@ -11,5 +11,5 @@ interface WebToonRepository {
 
     fun getNewWebToonList(html: String): Flow<List<NewWebtoon>>
 
-    fun getWebToonInfo(titleId: Long, week: String): Flow<WebToonInfo>
+    fun getWebToonInfo(titleId: Long, week: String): Flow<WebtoonInfo>
 }

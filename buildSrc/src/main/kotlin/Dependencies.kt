@@ -9,7 +9,7 @@ object Version {
     const val ANDROID_JUNIT = "1.1.3"
     const val ESPRESSO = "3.4.0"
 
-    const val MATERIAL = "1.6.1"
+    const val MATERIAL = "1.8.0-alpha02"
 
     const val JUNIT = "4.13.2"
 

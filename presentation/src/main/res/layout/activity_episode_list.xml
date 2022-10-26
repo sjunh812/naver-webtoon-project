@@ -11,6 +11,7 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/layout_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -21,138 +22,280 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.NaverWebtoon.AppBarOverlay">
+            android:theme="@style/Theme.NaverWebtoon.AppBarOverlay"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/layout_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:titleEnabled="false"
                 app:toolbarId="@id/toolbar">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_webtoon_info"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:fitsSystemWindows="true"
-                    android:paddingStart="25dp"
-                    android:paddingTop="80dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:webtoonInfoBackgroundColor="@{viewModel.webtoonInfo.color}">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/iv_background_thumbnail"
-                        android:layout_width="220dp"
-                        android:layout_height="0dp"
-                        app:imageFromUrl="@{viewModel.webtoonInfo.backgroundImageUrl}"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_webtoon_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="25dp"
+                        app:webtoonInfoBackgroundColor="@{viewModel.webtoonInfo.colorCode}">
+
+                        <ImageView
+                            android:id="@+id/iv_background_thumbnail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            app:imageFromUrl="@{viewModel.webtoonInfo.backgroundImageUrl}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_back_thumbnail"
+                            android:layout_width="220dp"
+                            android:layout_height="170dp"
+                            android:layout_marginTop="50dp"
+                            app:imageFromUrl="@{viewModel.webtoonInfo.backImageUrl}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1" />
+
+                        <ImageView
+                            android:id="@+id/iv_front_thumbnail"
+                            android:layout_width="220dp"
+                            android:layout_height="170dp"
+                            android:layout_marginTop="50dp"
+                            app:imageFromUrl="@{viewModel.webtoonInfo.frontImageUrl}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1" />
+
+                        <TextView
+                            android:id="@+id/tv_summary"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="100dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{viewModel.webtoonInfo.summary}"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toTopOf="@id/tv_title"
+                            app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            tools:text="아저씨는 건들지 말자" />
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{viewModel.webtoonInfo.title}"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/tv_author"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_summary"
+                            tools:text="김부장" />
+
+                        <TextView
+                            android:id="@+id/tv_author"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{viewModel.webtoonInfo.author}"
+                            android:textColor="@color/gray_a9"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toTopOf="@id/tv_score"
+                            app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_title"
+                            tools:text="박태준 만화회사 / 정종택" />
+
+                        <TextView
+                            android:id="@+id/tv_score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_author"
+                            app:webtoonScore="@{viewModel.webtoonInfo.score}"
+                            tools:text="★ 9.23" />
+
+                        <TextView
+                            android:id="@+id/tv_dot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:text="@string/middle_dot"
+                            android:textColor="@color/gray_a9"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toEndOf="@id/tv_score"
+                            app:layout_constraintTop_toBottomOf="@id/tv_author" />
+
+                        <TextView
+                            android:id="@+id/tv_favorite_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:text="@{viewModel.webtoonInfo.favoriteCount}"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toEndOf="@id/tv_dot"
+                            app:layout_constraintTop_toBottomOf="@id/tv_author"
+                            tools:text="관심 10만 +" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_webtoon_info_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingHorizontal="25dp"
+                        android:paddingVertical="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_back_thumbnail"
-                        android:layout_width="220dp"
-                        android:layout_height="170dp"
-                        app:imageFromUrl="@{viewModel.webtoonInfo.backImageUrl}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_front_thumbnail"
-                        android:layout_width="220dp"
-                        android:layout_height="170dp"
-                        app:imageFromUrl="@{viewModel.webtoonInfo.frontImageUrl}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_summary"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{viewModel.webtoonInfo.summary}"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toTopOf="@id/tv_title"
-                        app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0"
-                        app:layout_constraintVertical_chainStyle="packed"
-                        tools:text="아저씨는 건들지 말자" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_background_thumbnail">
 
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{viewModel.webtoonInfo.title}"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@id/tv_author"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_summary"
-                        tools:text="김부장" />
+                        <TextView
+                            android:id="@+id/tv_summary_detail"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{viewModel.webtoonInfo.summaryDetail}"
+                            android:textColor="@color/gray_a9"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toStartOf="@id/iv_arrow"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="힘없고 가진거 하나 없이 맞고만 살던 나였는데... 우연히 비밀의 뉴튜브를 발견하게 되고 갑자기 떼돈을 벌었다." />
 
-                    <TextView
-                        android:id="@+id/tv_author"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{viewModel.webtoonInfo.author}"
-                        android:textColor="@color/gray_a9"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toTopOf="@id/tv_score"
-                        app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_title"
-                        tools:text="박태준 만화회사 / 정종택" />
+                        <ImageView
+                            android:id="@+id/iv_arrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_down_arrow"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_author"
-                        app:webtoonScore="@{viewModel.webtoonInfo.score}"
-                        tools:text="★ 9.23" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_webtoon_info_detail_hide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_summary_detail">
 
-                    <TextView
-                        android:id="@+id/tv_dot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:text="@string/middle_dot"
-                        android:textColor="@color/gray_a9"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toEndOf="@id/tv_score"
-                        app:layout_constraintTop_toBottomOf="@id/tv_author" />
+                            <TextView
+                                android:id="@+id/tv_genre_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_genre"
+                                android:textColor="@color/gray_a9"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_favorite_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:text="@{viewModel.webtoonInfo.favCount}"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toEndOf="@id/tv_dot"
-                        app:layout_constraintTop_toBottomOf="@id/tv_author"
-                        tools:text="관심 10만 +" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:id="@+id/tv_genre"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="@{viewModel.webtoonInfo.genre}"
+                                android:textColor="@color/black"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_genre_title"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="스토리" />
+
+                            <TextView
+                                android:id="@+id/tv_divider"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/pipeline"
+                                android:textColor="@color/gray_a9"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_genre"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_genre_detail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@{viewModel.webtoonInfo.genreDetail}"
+                                android:textColor="@color/black"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_divider"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="액션" />
+
+                            <TextView
+                                android:id="@+id/tv_publish_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_publish"
+                                android:textColor="@color/gray_a9"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tv_genre_title" />
+
+                            <TextView
+                                android:id="@+id/tv_weekday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="@{viewModel.webtoonInfo.weekday}"
+                                android:textColor="@color/black"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_publish_title"
+                                app:layout_constraintTop_toBottomOf="@id/tv_genre_title"
+                                tools:text="일" />
+
+                            <TextView
+                                android:id="@+id/tv_divider_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/pipeline"
+                                android:textColor="@color/gray_a9"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_weekday"
+                                app:layout_constraintTop_toBottomOf="@id/tv_genre_title" />
+
+                            <TextView
+                                android:id="@+id/tv_age"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@{viewModel.webtoonInfo.age}"
+                                android:textColor="@color/black"
+                                android:textSize="11sp"
+                                app:layout_constraintStart_toEndOf="@id/tv_divider_2"
+                                app:layout_constraintTop_toBottomOf="@id/tv_genre_title"
+                                tools:text="15세 이용가" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"

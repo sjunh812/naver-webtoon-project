@@ -28,10 +28,12 @@ import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayListBinding
 import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
+import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 import org.sjhstudio.naverwebtoon.util.setCurrentItemWithDuration
 import org.sjhstudio.naverwebtoon.util.setStatusBarMode
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class WeekdayListFragment :
@@ -72,27 +74,41 @@ class WeekdayListFragment :
         initView()
         initWebView()
         observeData()
+        Log.e("debug", "onViewCreated()")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        removeTopBannerScrollJob()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("debug", "onResume()")
+        if (topBannerScrollJob == null) createTopBannerScrollJob()
     }
 
     private fun initView() {
         with(binding) {
+            var toolbarIn = false
             appBar.addOnOffsetChangedListener { _, verticalOffset ->
-                if (verticalOffset != 0 && !toolbar.isVisible) {
+                if (verticalOffset != 0 && !toolbarIn) {
+                    toolbarIn = true
                     toolbar.isVisible = true
                     toolbar.startAnimation(toolbarInAnim)
-                    setStatusBarMode(
-                        window = requireActivity().window,
-                        isLightMode = true
-                    )
-                } else if (verticalOffset == 0 && toolbar.isVisible) {
+                    setStatusBarMode(window = requireActivity().window, isLightMode = true)
+                } else if (verticalOffset == 0 && toolbarIn) {
+                    toolbarIn = false
                     toolbar.startAnimation(toolbarOutAnim)
                 }
+
+                if (abs(verticalOffset) == appBar.totalScrollRange) removeTopBannerScrollJob()
+                else if (topBannerScrollJob == null) createTopBannerScrollJob()
             }
             viewPagerWeekdayList.apply {
                 adapter = weekdayPagerAdapter
                 setCurrentItem(DateTime().dayOfWeek - 1, false)
             }
-            viewPagerWeekdayList.adapter = weekdayPagerAdapter
             TabLayoutMediator(layoutTab, viewPagerWeekdayList) { tab, position ->
                 tab.text = getTabTitle(position)
             }.attach()
@@ -178,9 +194,9 @@ class WeekdayListFragment :
         with(weekdayListViewModel) {
             lifecycleScope.launchWhenStarted {
                 newList.collectLatest { list ->
-                    list.takeIf { it.isNotEmpty() }?.let { newWebToons ->
-                        newWebToonAdapter.submitList(newWebToons)
-                        initTopBannerViewPager(newWebToons)
+                    list.takeIf { it.isNotEmpty() }?.let { newWebtoons ->
+                        initTopBannerViewPager(newWebtoons)
+                        newWebToonAdapter.submitList(newWebtoons)
                     }
                 }
             }
@@ -203,24 +219,33 @@ class WeekdayListFragment :
     }
 
     fun createTopBannerScrollJob() {
+        Log.e("debug", "create top banner scroll job")
         if (topBannerScrollJob != null) topBannerScrollJob?.cancel()
         topBannerScrollJob = lifecycleScope.launchWhenResumed {
             delay(3000)
             binding.viewPagerTopBanner.setCurrentItemWithDuration(
-                binding.viewPagerTopBanner.currentItem + 1,
-                500
+                item = binding.viewPagerTopBanner.currentItem + 1,
+                duration = 500
             )
         }
     }
 
+    private fun removeTopBannerScrollJob() {
+        Log.e("debug", "remove top banner scroll job")
+        if (topBannerScrollJob != null) {
+            topBannerScrollJob?.cancel()
+            topBannerScrollJob = null
+        }
+    }
+
     private fun getTabTitle(position: Int): String? = when (position) {
-        MONDAY_INDEX -> "월"
-        TUESDAY_INDEX -> "화"
-        WEDNESDAY_INDEX -> "수"
-        THURSDAY_INDEX -> "목"
-        FRIDAY_INDEX -> "금"
-        SATURDAY_INDEX -> "토"
-        SUNDAY_INDEX -> "일"
+        MONDAY_INDEX -> Weekday.MON.korean
+        TUESDAY_INDEX -> Weekday.TUE.korean
+        WEDNESDAY_INDEX -> Weekday.WED.korean
+        THURSDAY_INDEX -> Weekday.THU.korean
+        FRIDAY_INDEX -> Weekday.FRI.korean
+        SATURDAY_INDEX -> Weekday.SAT.korean
+        SUNDAY_INDEX -> Weekday.SUN.korean
         else -> null
     }
 
@@ -229,7 +254,7 @@ class WeekdayListFragment :
         override fun onAnimationStart(p0: Animation?) {}
 
         override fun onAnimationEnd(p0: Animation?) {
-            setStatusBarMode(requireActivity().window, false)
+            setStatusBarMode(window = requireActivity().window, isLightMode = false)
             binding.toolbar.isVisible = false
         }
 

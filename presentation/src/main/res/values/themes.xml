@@ -14,7 +14,5 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.NaverWebtoon.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:elevation">0dp</item>
-    </style>
+    <style name="Theme.NaverWebtoon.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 </resources>

@@ -8,10 +8,12 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.viewpager2.widget.ViewPager2
 
 fun setStatusBarMode(window: Window, isLightMode: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
         window.insetsController?.let { insetsController ->
             if (isLightMode) {
                 insetsController.setSystemBarsAppearance(
@@ -51,6 +53,7 @@ fun ViewPager2.setCurrentItemWithDuration(
     }
 
     animator.addListener(object : Animator.AnimatorListener {
+
         override fun onAnimationStart(animation: Animator?) {
             beginFakeDrag()
         }
