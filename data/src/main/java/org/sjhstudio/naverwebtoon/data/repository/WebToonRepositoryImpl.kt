@@ -9,7 +9,7 @@ import org.sjhstudio.naverwebtoon.data.mapperToThumbnail
 import org.sjhstudio.naverwebtoon.data.mapperToWebToonId
 import org.sjhstudio.naverwebtoon.data.mapperToWebToonInfoColor
 import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
-import org.sjhstudio.naverwebtoon.domain.model.WebToonInfo
+import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
 import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
@@ -87,7 +87,7 @@ internal class WebToonRepositoryImpl @Inject constructor(
         emit(list)
     }
 
-    override fun getWebToonInfo(titleId: Long, week: String): Flow<WebToonInfo> = flow {
+    override fun getWebToonInfo(titleId: Long, week: String): Flow<WebtoonInfo> = flow {
         val document = Jsoup.parse(mobileApi.getEpisodeList(titleId, week).charStream().readText())
         val rootElement = document.select("div.section_toon_info")
         val infoElement = rootElement.select("div.area_info")
@@ -102,13 +102,13 @@ internal class WebToonRepositoryImpl @Inject constructor(
             else if (url.contains("front")) frontThumbnail = mapperToThumbnail(url)
         }
 
-        val webToonInfo = WebToonInfo(
+        val webToonInfo = WebtoonInfo(
             id = titleId,
             summary = infoElement.select("span.summary").text(),
             title = infoElement.select("strong.title").text(),
             author = infoElement.select("span.author").text(),
             score = infoElement.select("span.score").text(),
-            favCount = infoElement.select("span.favcount").text(),
+            favoriteCount = infoElement.select("span.favcount").text(),
             backImageUrl = backThumbnail,
             frontImageUrl = frontThumbnail,
             backgroundImageUrl = mapperToThumbnail(
@@ -116,11 +116,11 @@ internal class WebToonRepositoryImpl @Inject constructor(
             ),
             genre = infoBackElement.select("div.genre span.length").text(),
             genreDetail = infoBackElement.select("div.genre ul.property.list_detail li").text(),
-            weekday = infoBackElement.select("div.week_day ul.list_detail li").text(),
+            weekday = infoBackElement.select("div.week_day ul.list_detail li").first()?.text() ?: "",
             age = infoBackElement.select("ul.property.list_detail.age li").text(),
             summaryDetail = infoBackElement.select("div.summary > p").text(),
-            color = mapperToWebToonInfoColor(rootElement.attr("style")),
-            adult = document.select("p.login_desc").attr("id").isNotEmpty()
+            colorCode = mapperToWebToonInfoColor(rootElement.attr("style")),
+            isAdult = document.select("p.login_desc").attr("id").isNotEmpty()
         )
 
         println("xxx webToonInfo: $webToonInfo")

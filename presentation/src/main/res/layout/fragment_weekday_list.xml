@@ -13,7 +13,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.NaverWebtoon.AppBarOverlay">
+            android:theme="@style/Theme.NaverWebtoon.AppBarOverlay"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"

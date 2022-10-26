@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.sjhstudio.naverwebtoon.domain.model.WebToonInfo
+import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.WEEKDAY
@@ -21,7 +21,9 @@ class EpisodeListViewModel @Inject constructor(
     private val weekday: String = savedStateHandle[WEEKDAY] ?: throw IllegalStateException()
     private val titleId: Long = savedStateHandle[TITLE_ID] ?: throw IllegalStateException()
 
-    private var _webtoonInfo = MutableStateFlow<WebToonInfo?>(null)
+    var detailExpanded = false
+
+    private var _webtoonInfo = MutableStateFlow<WebtoonInfo?>(null)
     val webtoonInfo = _webtoonInfo.asStateFlow()
 
     init {

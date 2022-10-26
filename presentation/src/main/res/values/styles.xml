@@ -6,6 +6,7 @@
     </style>
 
     <style name="TextAppearance.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 </resources>
