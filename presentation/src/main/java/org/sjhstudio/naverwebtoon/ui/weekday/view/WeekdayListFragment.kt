@@ -41,7 +41,7 @@ class WeekdayListFragment :
 
     private val weekdayListViewModel: WeekdayListViewModel by viewModels()
     private val weekdayPagerAdapter: WeekdayPagerAdapter by lazy { WeekdayPagerAdapter(this) }
-    private val newWebToonAdapter: NewWebToonAdapter by lazy { NewWebToonAdapter() }
+    private val newWebToonAdapter: NewWebtoonAdapter by lazy { NewWebtoonAdapter() }
 
     private val toolbarInAnim: Animation by lazy {
         AnimationUtils.loadAnimation(requireContext(), R.anim.toolbar_in)
@@ -84,8 +84,7 @@ class WeekdayListFragment :
 
     override fun onResume() {
         super.onResume()
-        Log.e("debug", "onResume()")
-        if (topBannerScrollJob == null) createTopBannerScrollJob()
+        if (checkInitTopBannerScrollJob()) createTopBannerScrollJob()
     }
 
     private fun initView() {
@@ -103,7 +102,7 @@ class WeekdayListFragment :
                 }
 
                 if (abs(verticalOffset) == appBar.totalScrollRange) removeTopBannerScrollJob()
-                else if (topBannerScrollJob == null) createTopBannerScrollJob()
+                else if (checkInitTopBannerScrollJob()) createTopBannerScrollJob()
             }
             viewPagerWeekdayList.apply {
                 adapter = weekdayPagerAdapter
@@ -143,11 +142,11 @@ class WeekdayListFragment :
 
     private fun initTopBannerViewPager(list: List<NewWebtoon>) {
         with(binding.viewPagerTopBanner) {
-            adapter = newWebToonAdapter
             setCurrentItem(
                 Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % list.size),
                 false
             )
+            adapter = newWebToonAdapter
             setPageTransformer { page, position ->
                 val title = page.findViewById<TextView>(R.id.tv_title).text
                 val frontThumbnail = page.findViewById<ImageView>(R.id.iv_front_thumbnail)
@@ -170,7 +169,7 @@ class WeekdayListFragment :
                     handleThumbnailAnimation(frontThumbnail, backThumbnail, false)
                 } else {
                     if (title.isEmpty()) {
-                        println("xxx Init: $position - $title")
+                        Log.e("test", "init setPageTransformer")
                         handleThumbnailAnimation(frontThumbnail, backThumbnail, true)
                         createTopBannerScrollJob()
                     }
@@ -237,6 +236,9 @@ class WeekdayListFragment :
             topBannerScrollJob = null
         }
     }
+
+    private fun checkInitTopBannerScrollJob() =
+        topBannerScrollJob == null && binding.viewPagerTopBanner.adapter != null
 
     private fun getTabTitle(position: Int): String? = when (position) {
         MONDAY_INDEX -> Weekday.MON.korean

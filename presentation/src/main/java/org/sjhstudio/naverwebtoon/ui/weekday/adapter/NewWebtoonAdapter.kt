@@ -9,10 +9,10 @@ import org.sjhstudio.naverwebtoon.databinding.ItemNewWebtoonBinding
 import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.util.getStatusBarHeight
 
-class NewWebToonAdapter :
-    ListAdapter<NewWebtoon, NewWebToonAdapter.NewWebToonViewHolder>(diffCallback) {
+class NewWebtoonAdapter :
+    ListAdapter<NewWebtoon, NewWebtoonAdapter.NewWebtoonViewHolder>(diffCallback) {
 
-    class NewWebToonViewHolder(private val binding: ItemNewWebtoonBinding) :
+    class NewWebtoonViewHolder(private val binding: ItemNewWebtoonBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -28,13 +28,13 @@ class NewWebToonAdapter :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewWebToonViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewWebtoonViewHolder {
         val binding =
             ItemNewWebtoonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NewWebToonViewHolder(binding)
+        return NewWebtoonViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: NewWebToonViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NewWebtoonViewHolder, position: Int) {
         val item = getItem(position % currentList.size)
         item?.let { holder.bind(it) }
     }
