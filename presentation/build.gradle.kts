@@ -53,6 +53,7 @@ dependencies {
     implementation(Library.AndroidX.NAVIGATION_RUNTIME)
     implementation(Library.AndroidX.NAVIGATION_FRAGMENT)
     implementation(Library.AndroidX.NAVIGATION_UI)
+    implementation(Library.AndroidX.PAGING)
     androidTestImplementation(Library.AndroidX.ANDROID_JUNIT)
     androidTestImplementation(Library.AndroidX.ESPRESSO)
 

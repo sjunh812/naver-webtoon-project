@@ -14,6 +14,8 @@ dependencies {
 
     implementation(Library.Kotlin.COROUTINE_CORE)
 
+    implementation(Library.AndroidX.PAGING_COMMON)
+
     implementation(Library.Network.RETROFIT)
     implementation(Library.Network.CONVERTER_MOSHI)
     implementation(Library.Network.MOSHI)

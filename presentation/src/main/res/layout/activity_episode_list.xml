@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="org.sjhstudio.naverwebtoon.ui.episode.viewmodel.EpisodeListViewModel" />
+
+        <variable
+            name="adapter"
+            type="org.sjhstudio.naverwebtoon.ui.episode.adapter.EpisodeAdapter" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -48,7 +52,7 @@
 
                         <ImageView
                             android:id="@+id/iv_background_thumbnail"
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:layout_height="0dp"
                             app:imageFromUrl="@{viewModel.webtoonInfo.backgroundImageUrl}"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +92,7 @@
                             android:textColor="@color/black"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toTopOf="@id/tv_title"
-                            app:layout_constraintEnd_toStartOf="@id/iv_background_thumbnail"
+                            app:layout_constraintEnd_toStartOf="@id/iv_front_thumbnail"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0"
@@ -167,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:paddingHorizontal="25dp"
-                        android:paddingVertical="10dp"
+                        android:paddingVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/iv_background_thumbnail">
@@ -179,7 +183,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@{viewModel.webtoonInfo.summaryDetail}"
-                            android:textColor="@color/gray_a9"
+                            android:textColor="@color/gray_a0"
                             android:textSize="13sp"
                             app:layout_constraintEnd_toStartOf="@id/iv_arrow"
                             app:layout_constraintStart_toStartOf="parent"
@@ -295,13 +299,19 @@
                                 tools:text="15세 이용가" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/divider_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/gray_e2" />
                 </LinearLayout>
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_toolbar"
                     android:theme="@style/ThemeOverlay.MaterialComponents.Toolbar.Surface"
                     app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin">
@@ -332,20 +342,14 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_view"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_episode_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="2000dp" />
-            </FrameLayout>
-        </androidx.core.widget.NestedScrollView>
+            android:clipToPadding="false"
+            android:paddingVertical="3dp"
+            app:adapter="@{adapter}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

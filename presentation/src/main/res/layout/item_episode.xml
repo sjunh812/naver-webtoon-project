@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="org.sjhstudio.naverwebtoon.domain.model.Episode" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp">
+
+        <ImageView
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="101dp"
+            android:layout_height="51dp"
+            app:episodeImageFromUrl="@{data.thumbnail}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="2dp"
+            android:text="@{data.title}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_score"
+            app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
+            app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="100화 제목" />
+
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/gray_a0"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:webtoonScore="@{data.score}"
+            tools:text="★ 9.98" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@{data.date}"
+            android:textColor="@color/gray_a0"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_score"
+            app:layout_constraintStart_toEndOf="@id/tv_score"
+            tools:text="22.10.28" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

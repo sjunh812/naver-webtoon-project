@@ -1,5 +1,8 @@
 package org.sjhstudio.naverwebtoon.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jsoup.Jsoup
@@ -8,10 +11,8 @@ import org.sjhstudio.naverwebtoon.data.mapperToNewWebToonColor
 import org.sjhstudio.naverwebtoon.data.mapperToThumbnail
 import org.sjhstudio.naverwebtoon.data.mapperToWebToonId
 import org.sjhstudio.naverwebtoon.data.mapperToWebToonInfoColor
-import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
-import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
-import org.sjhstudio.naverwebtoon.domain.model.Weekday
-import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
+import org.sjhstudio.naverwebtoon.data.source.EpisodePagingSource
+import org.sjhstudio.naverwebtoon.domain.model.*
 import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
 import javax.inject.Inject
 
@@ -116,7 +117,8 @@ internal class WebToonRepositoryImpl @Inject constructor(
             ),
             genre = infoBackElement.select("div.genre span.length").text(),
             genreDetail = infoBackElement.select("div.genre ul.property.list_detail li").text(),
-            weekday = infoBackElement.select("div.week_day ul.list_detail li").first()?.text() ?: "",
+            weekday = infoBackElement.select("div.week_day ul.list_detail li").first()?.text()
+                ?: "",
             age = infoBackElement.select("ul.property.list_detail.age li").text(),
             summaryDetail = infoBackElement.select("div.summary > p").text(),
             colorCode = mapperToWebToonInfoColor(rootElement.attr("style")),
@@ -125,5 +127,19 @@ internal class WebToonRepositoryImpl @Inject constructor(
 
         println("xxx webToonInfo: $webToonInfo")
         emit(webToonInfo)
+    }
+
+    override fun getEpisodePagingData(
+        titleId: Long,
+        week: String
+    ): Flow<PagingData<Episode>> {
+        return Pager(config = PagingConfig(pageSize = EPISODE_PAGE_SIZE)) {
+            EpisodePagingSource(mobileApi, titleId, week)
+        }.flow
+    }
+
+    companion object {
+
+        private const val EPISODE_PAGE_SIZE = 25
     }
 }
