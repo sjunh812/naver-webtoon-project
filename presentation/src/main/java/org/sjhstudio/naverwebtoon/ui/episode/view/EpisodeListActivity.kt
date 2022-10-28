@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import org.sjhstudio.naverwebtoon.R
 import org.sjhstudio.naverwebtoon.base.BaseActivity
 import org.sjhstudio.naverwebtoon.databinding.ActivityEpisodeListBinding
+import org.sjhstudio.naverwebtoon.ui.episode.adapter.EpisodeAdapter
 import org.sjhstudio.naverwebtoon.ui.episode.viewmodel.EpisodeListViewModel
 import org.sjhstudio.naverwebtoon.util.pxToDp
 import org.sjhstudio.naverwebtoon.util.setStatusBarMode
@@ -25,6 +26,7 @@ class EpisodeListActivity :
     BaseActivity<ActivityEpisodeListBinding>(R.layout.activity_episode_list) {
 
     private val episodeListViewModel: EpisodeListViewModel by viewModels()
+    private val episodeAdapter: EpisodeAdapter by lazy { EpisodeAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class EpisodeListActivity :
     private fun bind() {
         with(binding) {
             viewModel = episodeListViewModel
+            adapter = episodeAdapter
         }
     }
 
@@ -53,18 +56,17 @@ class EpisodeListActivity :
             appBar.addOnOffsetChangedListener { appBar, verticalOffset ->
                 val standard = 1 - SHOW_TOOLBAR_OFFSET / pxToDp(appBar.height.toFloat()).toFloat()
                 val percentage = 1f - abs(verticalOffset).toFloat() / appBar.totalScrollRange
+                val toolbarBackground = ContextCompat.getDrawable(this@EpisodeListActivity, R.drawable.bg_toolbar)
                 Log.e("debug", "AppBar offset percent: $percentage")
                 setStatusBarMode(window = window, isLightMode = percentage < 1.0f)
 
                 if (percentage >= standard) {
-                    val color = Color.argb(((1 - percentage) / 0.4f * 255).toInt(), 255, 255, 255)
-                    toolbar.setBackgroundColor(color)
+                    toolbarBackground?.alpha = ((1 - percentage) / 0.4f * 255).toInt()
                     if (tvToolbarTitle.text.isNotEmpty()) tvToolbarTitle.text = ""
                 } else {
-                    val color = Color.argb(255, 255, 255, 255)
-                    toolbar.setBackgroundColor(color)
                     if (tvToolbarTitle.text.isEmpty()) tvToolbarTitle.text = tvTitle.text
                 }
+                toolbar.background = toolbarBackground
             }
             layoutWebtoonInfoDetail.setOnClickListener {
                 handleWebtoonDetailView()
@@ -82,6 +84,13 @@ class EpisodeListActivity :
                                 finish()
                             }
                         }
+                    }
+                }
+            }
+            lifecycleScope.launchWhenStarted {
+                episodePagingData.collectLatest { pagingData ->
+                    if (pagingData != null) {
+                        episodeAdapter.submitData(pagingData)
                     }
                 }
             }

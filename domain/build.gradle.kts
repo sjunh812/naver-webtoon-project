@@ -10,4 +10,6 @@ java {
 
 dependencies {
     implementation(Library.Kotlin.COROUTINE_CORE)
+
+    implementation(Library.AndroidX.PAGING_COMMON)
 }
