@@ -1,8 +1,6 @@
 package org.sjhstudio.naverwebtoon.ui.episode.view
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -31,12 +29,8 @@ class EpisodeListActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
-            binding.toolbar.setPadding(
-                0,
-                insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
-                0,
-                0
-            )
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            binding.toolbar.setPadding(0, statusBarHeight, 0, 0)
             WindowInsetsCompat.CONSUMED
         }
         bind()
@@ -53,24 +47,22 @@ class EpisodeListActivity :
 
     private fun initView() {
         with(binding) {
+            ivBack.setOnClickListener { onBackPressed() }
             appBar.addOnOffsetChangedListener { appBar, verticalOffset ->
-                val standard = 1 - SHOW_TOOLBAR_OFFSET / pxToDp(appBar.height.toFloat()).toFloat()
-                val percentage = 1f - abs(verticalOffset).toFloat() / appBar.totalScrollRange
-                val toolbarBackground = ContextCompat.getDrawable(this@EpisodeListActivity, R.drawable.bg_toolbar)
-                Log.e("debug", "AppBar offset percent: $percentage")
-                setStatusBarMode(window = window, isLightMode = percentage < 1.0f)
-
-                if (percentage >= standard) {
-                    toolbarBackground?.alpha = ((1 - percentage) / 0.4f * 255).toInt()
+                val standard = 1f - SHOW_TOOLBAR_OFFSET / pxToDp(appBar.height.toFloat())
+                val offset = 1f - abs(verticalOffset).toFloat() / appBar.totalScrollRange
+                val toolbarBackground =
+                    ContextCompat.getDrawable(this@EpisodeListActivity, R.drawable.bg_toolbar)
+                setStatusBarMode(window = window, isLightMode = offset < 1.0f)
+                if (offset >= standard) {
+                    toolbarBackground?.alpha = ((1 - offset) / 0.4f * 255).toInt()
                     if (tvToolbarTitle.text.isNotEmpty()) tvToolbarTitle.text = ""
                 } else {
                     if (tvToolbarTitle.text.isEmpty()) tvToolbarTitle.text = tvTitle.text
                 }
                 toolbar.background = toolbarBackground
             }
-            layoutWebtoonInfoDetail.setOnClickListener {
-                handleWebtoonDetailView()
-            }
+            layoutWebtoonInfoDetail.setOnClickListener { handleWebtoonDetailView() }
         }
     }
 
@@ -80,18 +72,16 @@ class EpisodeListActivity :
                 webtoonInfo.collectLatest { webtoonInfo ->
                     webtoonInfo?.let { info ->
                         if (info.isAdult) {
-                            showConfirmAlertDialog("해당 웹툰은 성인 웹툰으로\n이용이 제한됩니다.") {
-                                finish()
-                            }
+                            showConfirmAlertDialog(
+                                message = "해당 웹툰은 성인 웹툰으로\n이용이 제한됩니다."
+                            ) { finish() }
                         }
                     }
                 }
             }
             lifecycleScope.launchWhenStarted {
                 episodePagingData.collectLatest { pagingData ->
-                    if (pagingData != null) {
-                        episodeAdapter.submitData(pagingData)
-                    }
+                    pagingData?.let { data -> episodeAdapter.submitData(data) }
                 }
             }
         }
@@ -126,6 +116,6 @@ class EpisodeListActivity :
         const val WEEKDAY = "weekday"
         const val TITLE_ID = "title_id"
 
-        private const val SHOW_TOOLBAR_OFFSET = 85
+        private const val SHOW_TOOLBAR_OFFSET = 85f
     }
 }

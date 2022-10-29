@@ -24,13 +24,13 @@ class EpisodeListViewModel @Inject constructor(
     private val weekday: String = savedStateHandle[WEEKDAY] ?: throw IllegalStateException()
     private val titleId: Long = savedStateHandle[TITLE_ID] ?: throw IllegalStateException()
 
-    var detailExpanded = false
-
     private var _webtoonInfo = MutableStateFlow<WebtoonInfo?>(null)
     val webtoonInfo = _webtoonInfo.asStateFlow()
 
     private var _episodePagingData = MutableStateFlow<PagingData<Episode>?>(null)
     val episodePagingData = _episodePagingData.asStateFlow()
+
+    var detailExpanded = false
 
     init {
         getWebToonInfo()
@@ -50,9 +50,9 @@ class EpisodeListViewModel @Inject constructor(
     private fun getEpisodePagingData() = viewModelScope.launch {
         repository.getEpisodePagingData(titleId, weekday)
             .cachedIn(viewModelScope)
-            .onStart {  }
-            .onCompletion {  }
-            .catch {  }
+            .onStart { }
+            .onCompletion { }
+            .catch { }
             .collectLatest { pagingData ->
                 _episodePagingData.emit(pagingData)
             }
