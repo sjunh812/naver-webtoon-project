@@ -5,4 +5,5 @@
     <string name="label_weekday_webtoon">요일별 웹툰</string>
     <string name="label_genre">장르</string>
     <string name="label_publish">연재</string>
+    <string name="label_up">UP</string>
 </resources>

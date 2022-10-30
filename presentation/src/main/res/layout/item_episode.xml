@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="2dp"
@@ -36,12 +36,32 @@
             android:text="@{data.title}"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@id/tv_score"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_up"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
             app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="100화 제목" />
+            tools:text="제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목" />
+
+        <TextView
+            android:id="@+id/tv_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/bg_up"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="1dp"
+            android:text="@string/label_up"
+            android:textColor="@color/red"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_title"
+            app:layout_constraintTop_toTopOf="@id/tv_title" />
 
         <TextView
             android:id="@+id/tv_score"
