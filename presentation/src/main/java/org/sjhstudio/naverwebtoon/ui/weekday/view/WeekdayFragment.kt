@@ -11,8 +11,6 @@ import org.sjhstudio.naverwebtoon.base.BaseFragment
 import org.sjhstudio.naverwebtoon.databinding.FragmentWeekdayBinding
 import org.sjhstudio.naverwebtoon.domain.model.Weekday
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity
-import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
-import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.WEEKDAY
 import org.sjhstudio.naverwebtoon.ui.weekday.adapter.*
 import org.sjhstudio.naverwebtoon.ui.weekday.viewmodel.WeekdayListViewModel
 
@@ -21,7 +19,6 @@ class WeekdayFragment : BaseFragment<FragmentWeekdayBinding>(R.layout.fragment_w
     private val viewModel: WeekdayListViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private val dayListAdapter: WeekdayAdapter by lazy {
         WeekdayAdapter { id ->
-            getWeek()
             val intent = Intent(requireContext(), EpisodeListActivity::class.java).apply {
                 putExtra(WEEKDAY, getWeek())
                 putExtra(TITLE_ID, id)
@@ -33,7 +30,7 @@ class WeekdayFragment : BaseFragment<FragmentWeekdayBinding>(R.layout.fragment_w
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bind()
-        getDayList()
+        observeData()
     }
 
     private fun bind() {
@@ -42,7 +39,7 @@ class WeekdayFragment : BaseFragment<FragmentWeekdayBinding>(R.layout.fragment_w
         }
     }
 
-    private fun getDayList() {
+    private fun observeData() {
         with(viewModel) {
             lifecycleScope.launchWhenStarted {
                 weekdayList.collectLatest { map ->
@@ -61,5 +58,10 @@ class WeekdayFragment : BaseFragment<FragmentWeekdayBinding>(R.layout.fragment_w
         SATURDAY_INDEX -> Weekday.SAT.english
         SUNDAY_INDEX -> Weekday.SUN.english
         else -> null
+    }
+
+    companion object {
+        const val WEEKDAY = "weekday"
+        const val TITLE_ID = "title_id"
     }
 }

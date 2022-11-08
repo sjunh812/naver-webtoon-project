@@ -16,6 +16,7 @@ class EpisodeAdapter : PagingDataAdapter<Episode, EpisodeAdapter.EpisodeViewHold
         fun bind(episode: Episode) {
             with(binding) {
                 data = episode
+                println("xxx episode: $episode")
             }
         }
     }

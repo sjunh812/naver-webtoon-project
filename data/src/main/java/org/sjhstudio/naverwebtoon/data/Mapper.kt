@@ -1,14 +1,17 @@
 package org.sjhstudio.naverwebtoon.data
 
-fun mapperToWebToonId(href: String?): String? {
+fun mapperToWebtoonId(href: String?): String? {
     if (!href.isNullOrEmpty()) {
         var id = ""
+
         href.substring(22).forEach { c ->
             if (c == '&' || !Character.isDigit(c)) return id
             else id += c
         }
+
         return id
     }
+
     return null
 }
 
@@ -19,8 +22,9 @@ fun mapperToThumbnail(originUrl: String) =
     )
 
 // 신작 웹툰 배너 색상
-fun mapperToNewWebToonColor(rgb: String): List<Int> {
+fun mapperToNewWebtoonColor(rgb: String): List<Int> {
     val list = mutableListOf<Int>()
+
     try {
         rgb.substring(16, rgb.length - 2).split(",").forEach { codeStr ->
             val code = codeStr.trim()
@@ -29,11 +33,12 @@ fun mapperToNewWebToonColor(rgb: String): List<Int> {
     } catch (e: NumberFormatException) {
         e.printStackTrace()
     }
+
     return list
 }
 
 // 웹툰 정보 색상
-fun mapperToWebToonInfoColor(style: String): String {
+fun mapperToWebtoonInfoColor(style: String): String {
     return try {
         style.substring(17, 24)
     } catch (e: Exception) {

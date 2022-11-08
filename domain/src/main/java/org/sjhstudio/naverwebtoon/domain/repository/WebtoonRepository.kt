@@ -7,7 +7,7 @@ import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
 import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
 
-interface WebToonRepository {
+interface WebtoonRepository {
 
     fun getWeekdayWebToonList(): Flow<Map<String, List<WeekdayWebtoon>>>
 

@@ -60,23 +60,6 @@ class WeekdayListFragment :
 
     private var topBannerScrollJob: Job? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
-            binding.toolbar.setPadding(
-                0,
-                insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
-                0,
-                0
-            )
-            WindowInsetsCompat.CONSUMED
-        }
-        initView()
-        initWebView()
-        observeData()
-        Log.e("debug", "onViewCreated()")
-    }
-
     override fun onStop() {
         super.onStop()
         removeTopBannerScrollJob()
@@ -87,9 +70,22 @@ class WeekdayListFragment :
         if (checkInitTopBannerScrollJob()) createTopBannerScrollJob()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            binding.toolbar.setPadding(0, statusBarHeight, 0, 0)
+            WindowInsetsCompat.CONSUMED
+        }
+        initView()
+        initWebView()
+        observeData()
+    }
+
     private fun initView() {
         with(binding) {
             var toolbarIn = false
+
             appBar.addOnOffsetChangedListener { _, verticalOffset ->
                 if (verticalOffset != 0 && !toolbarIn) {
                     toolbarIn = true
@@ -104,10 +100,10 @@ class WeekdayListFragment :
                 if (abs(verticalOffset) == appBar.totalScrollRange) removeTopBannerScrollJob()
                 else if (checkInitTopBannerScrollJob()) createTopBannerScrollJob()
             }
-            viewPagerWeekdayList.apply {
-                adapter = weekdayPagerAdapter
-                setCurrentItem(DateTime().dayOfWeek - 1, false)
-            }
+
+            viewPagerWeekdayList.adapter = weekdayPagerAdapter
+            viewPagerWeekdayList.setCurrentItem(DateTime().dayOfWeek - 1, false)
+
             TabLayoutMediator(layoutTab, viewPagerWeekdayList) { tab, position ->
                 tab.text = getTabTitle(position)
             }.attach()
@@ -121,15 +117,12 @@ class WeekdayListFragment :
             setInitialScale(1)
             addJavascriptInterface(WebToonJavascriptInterface(weekdayListViewModel), "Android")
             webViewClient = object : WebViewClient() {
-
                 override fun onPageCommitVisible(view: WebView?, url: String?) {
                     super.onPageCommitVisible(view, url)
-                    Log.e("debug", "onPageCommitVisible()")
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    Log.e("debug", "onPageFinished()")
                     lifecycleScope.launchWhenStarted {
                         delay(1000)
                         binding.webView.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);")
@@ -154,29 +147,22 @@ class WeekdayListFragment :
 
                 if (position > 0 && position <= 0.5) {
                     if (!frontThumbnail.isVisible && !backThumbnail.isVisible) {
-                        println("xxx Animation start: $position - $title")
                         handleThumbnailAnimation(frontThumbnail, backThumbnail, true)
                         handleThumbnailVisible(frontThumbnail, backThumbnail, true)
-                    } else {
-                        println("xxx Animation already started: $position - $title")
                     }
                 } else if (position > 0.5) {
-                    println("xxx Animation start yet: $position - $title")
                     handleThumbnailVisible(frontThumbnail, backThumbnail, false)
                 } else if (position < 0) {
-                    println("xxx Animation clear: $position - $title")
                     handleThumbnailVisible(frontThumbnail, backThumbnail, true)
                     handleThumbnailAnimation(frontThumbnail, backThumbnail, false)
                 } else {
                     if (title.isEmpty()) {
-                        Log.e("test", "init setPageTransformer")
                         handleThumbnailAnimation(frontThumbnail, backThumbnail, true)
                         createTopBannerScrollJob()
                     }
                 }
             }
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
-
                 override fun onPageScrollStateChanged(state: Int) {
                     super.onPageScrollStateChanged(state)
                     when (state) {
@@ -218,7 +204,6 @@ class WeekdayListFragment :
     }
 
     fun createTopBannerScrollJob() {
-        Log.e("debug", "create top banner scroll job")
         if (topBannerScrollJob != null) topBannerScrollJob?.cancel()
         topBannerScrollJob = lifecycleScope.launchWhenResumed {
             delay(3000)
@@ -230,7 +215,6 @@ class WeekdayListFragment :
     }
 
     private fun removeTopBannerScrollJob() {
-        Log.e("debug", "remove top banner scroll job")
         if (topBannerScrollJob != null) {
             topBannerScrollJob?.cancel()
             topBannerScrollJob = null
@@ -252,7 +236,6 @@ class WeekdayListFragment :
     }
 
     inner class ToolbarAnimationListener : Animation.AnimationListener {
-
         override fun onAnimationStart(p0: Animation?) {}
 
         override fun onAnimationEnd(p0: Animation?) {
