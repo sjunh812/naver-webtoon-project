@@ -54,6 +54,7 @@ dependencies {
     implementation(Library.AndroidX.NAVIGATION_FRAGMENT)
     implementation(Library.AndroidX.NAVIGATION_UI)
     implementation(Library.AndroidX.PAGING)
+    implementation(Library.AndroidX.SPLASH_SCREEN)
     androidTestImplementation(Library.AndroidX.ANDROID_JUNIT)
     androidTestImplementation(Library.AndroidX.ESPRESSO)
 
