@@ -6,77 +6,93 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jsoup.Jsoup
-import org.sjhstudio.naverwebtoon.data.api.NaverMobileWebToonService
-import org.sjhstudio.naverwebtoon.data.mapperToNewWebToonColor
+import org.sjhstudio.naverwebtoon.data.api.MobileWebtoonService
+import org.sjhstudio.naverwebtoon.data.mapperToNewWebtoonColor
 import org.sjhstudio.naverwebtoon.data.mapperToThumbnail
-import org.sjhstudio.naverwebtoon.data.mapperToWebToonId
-import org.sjhstudio.naverwebtoon.data.mapperToWebToonInfoColor
+import org.sjhstudio.naverwebtoon.data.mapperToWebtoonId
+import org.sjhstudio.naverwebtoon.data.mapperToWebtoonInfoColor
 import org.sjhstudio.naverwebtoon.data.source.EpisodePagingSource
 import org.sjhstudio.naverwebtoon.domain.model.*
-import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
+import org.sjhstudio.naverwebtoon.domain.repository.WebtoonRepository
 import javax.inject.Inject
 
-internal class WebToonRepositoryImpl @Inject constructor(
-    private val mobileApi: NaverMobileWebToonService
-) : WebToonRepository {
+internal class WebtoonRepositoryImpl @Inject constructor(
+    private val mobileApi: MobileWebtoonService
+) : WebtoonRepository {
 
     override fun getWeekdayWebToonList(): Flow<Map<String, List<WeekdayWebtoon>>> = flow {
         val map = mutableMapOf<String, List<WeekdayWebtoon>>()
+
         Weekday.values().forEach { weekday ->
             val list = mutableListOf<WeekdayWebtoon>()
+
             Jsoup.parse(mobileApi.getWeekdayList(weekday.english).charStream().readText())
                 .select("ul.list_toon.type2")
                 .select("li.item").forEach Jsoup@{ element ->
-                    val id = mapperToWebToonId(element.select("a").attr("href"))?.toLongOrNull()
-                        ?: return@Jsoup
-                    list.add(
-                        WeekdayWebtoon(
-                            id = id,
-                            title = element.select("span.title_text").text(),
-                            author = element.select("span.author").text(),
-                            favoriteCount = element.select("span.favcount").text(),
-                            thumbnail = mapperToThumbnail(
-                                element.select("div.thumbnail > img").attr("src")
-                            ),
-                            isUpdated = element.select("span.blind").isNotEmpty()
+                    val webtoonId = mapperToWebtoonId(
+                        element.select("a").attr("href")
+                    )?.toLongOrNull()
+
+                    webtoonId?.let { id ->
+                        list.add(
+                            WeekdayWebtoon(
+                                id = id,
+                                title = element.select("span.title_text").text(),
+                                author = element.select("span.author").text(),
+                                favoriteCount = element.select("span.favcount").text(),
+                                thumbnail = mapperToThumbnail(
+                                    element.select("div.thumbnail > img").attr("src")
+                                ),
+                                isUpdated = element.select("span.blind").isNotEmpty()
+                            )
                         )
-                    )
+                    }
                 }
             map[weekday.english] = list
         }
+
         emit(map)
     }
 
     override fun getNewWebToonList(html: String): Flow<List<NewWebtoon>> = flow {
         val list = mutableListOf<NewWebtoon>()
+
         Jsoup.parse(html)
             .select("div.section_new_webtoon")
             .select("div.eg-flick-panel").forEach { element ->
-                val id = mapperToWebToonId(element.select("a").attr("href"))?.toLongOrNull()
-                    ?: return@forEach
-                var frontThumbnail = ""
-                var backThumbnail = ""
-                element.select("div.thumbnail > img").forEach { thumbnailElement ->
-                    val url = thumbnailElement.attr("src")
-                    if (url.contains("backImage")) backThumbnail = mapperToThumbnail(url)
-                    else if (url.contains("frontImage")) frontThumbnail = mapperToThumbnail(url)
-                    else frontThumbnail = mapperToThumbnail(url)
-                }
-                list.add(
-                    NewWebtoon(
-                        id = id,
-                        title = element.select("strong.title").text(),
-                        author = element.select("span.author").text(),
-                        summary = element.select("p.summary").text(),
-                        frontThumbnail = frontThumbnail,
-                        backThumbnail = backThumbnail,
-                        backgroundThumbnail = mapperToThumbnail(
-                            element.select("div.thumb_bg > img").attr("src")
-                        ),
-                        colorList = mapperToNewWebToonColor(element.select("a").attr("style"))
+                val webtoonId = mapperToWebtoonId(
+                    element.select("a").attr("href")
+                )?.toLongOrNull()
+
+                webtoonId?.let { id ->
+                    var frontImageUrl = ""
+                    var backImageUrl = ""
+
+                    element.select("div.thumbnail > img").forEach { thumbnailElement ->
+                        val url = thumbnailElement.attr("src")
+
+                        if (url.contains("backImage")) backImageUrl = mapperToThumbnail(url)
+                        else if (url.contains("frontImage")) frontImageUrl = mapperToThumbnail(url)
+                        else frontImageUrl = mapperToThumbnail(url)
+                    }
+
+                    list.add(
+                        NewWebtoon(
+                            id = id,
+                            title = element.select("strong.title").text(),
+                            author = element.select("span.author").text(),
+                            summary = element.select("p.summary").text(),
+                            frontThumbnail = frontImageUrl,
+                            backThumbnail = backImageUrl,
+                            backgroundThumbnail = mapperToThumbnail(
+                                element.select("div.thumb_bg > img").attr("src")
+                            ),
+                            colorList = mapperToNewWebtoonColor(element.select("a").attr("style"))
+                        )
                     )
-                )
+                }
             }
+
         emit(list)
     }
 
@@ -86,14 +102,17 @@ internal class WebToonRepositoryImpl @Inject constructor(
         val infoElement = rootElement.select("div.area_info")
         val infoBackElement = rootElement.select("div.info_back")
         val thumbnailElement = rootElement.select("div.area_thumbnail")
-        var frontThumbnail = ""
-        var backThumbnail = ""
+        var frontImageUrl = ""
+        var backImageUrl = ""
+
         thumbnailElement.select("> img").forEach { element ->
             val url = element.attr("src")
-            if (url.contains("back")) backThumbnail = mapperToThumbnail(url)
-            else if (url.contains("front")) frontThumbnail = mapperToThumbnail(url)
-            else frontThumbnail = mapperToThumbnail(url)
+
+            if (url.contains("back")) backImageUrl = mapperToThumbnail(url)
+            else if (url.contains("front")) frontImageUrl = mapperToThumbnail(url)
+            else frontImageUrl = mapperToThumbnail(url)
         }
+
         val webToonInfo = WebtoonInfo(
             id = titleId,
             summary = infoElement.select("span.summary").text(),
@@ -101,8 +120,8 @@ internal class WebToonRepositoryImpl @Inject constructor(
             author = infoElement.select("span.author").text(),
             score = infoElement.select("span.score").text(),
             favoriteCount = infoElement.select("span.favcount").text(),
-            backImageUrl = backThumbnail,
-            frontImageUrl = frontThumbnail,
+            backImageUrl = backImageUrl,
+            frontImageUrl = frontImageUrl,
             backgroundImageUrl = mapperToThumbnail(
                 thumbnailElement.select("div.thumb_bg img").attr("src")
             ),
@@ -112,9 +131,10 @@ internal class WebToonRepositoryImpl @Inject constructor(
                 ?: "",
             age = infoBackElement.select("ul.property.list_detail.age li").text(),
             summaryDetail = infoBackElement.select("div.summary > p").text(),
-            colorCode = mapperToWebToonInfoColor(rootElement.attr("style")),
+            colorCode = mapperToWebtoonInfoColor(rootElement.attr("style")),
             isAdult = document.select("p.login_desc").attr("id").isNotEmpty()
         )
+
         emit(webToonInfo)
     }
 
@@ -128,7 +148,6 @@ internal class WebToonRepositoryImpl @Inject constructor(
     }
 
     companion object {
-
         private const val EPISODE_PAGE_SIZE = 25
     }
 }

@@ -3,7 +3,7 @@ package org.sjhstudio.naverwebtoon.data.di
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sjhstudio.naverwebtoon.data.api.NaverMobileWebToonService
+import org.sjhstudio.naverwebtoon.data.api.MobileWebtoonService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -13,7 +13,6 @@ internal object ApiModule {
 
     @Provides
     @Singleton
-    fun provideNaverMobileWebToonService(@MobileUrl retrofit: Retrofit): NaverMobileWebToonService {
-        return retrofit.create(NaverMobileWebToonService::class.java)
-    }
+    fun provideMobileWebtoonService(@MobileUrl retrofit: Retrofit): MobileWebtoonService =
+        retrofit.create(MobileWebtoonService::class.java)
 }

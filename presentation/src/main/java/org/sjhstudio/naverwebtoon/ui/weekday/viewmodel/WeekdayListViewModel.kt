@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.sjhstudio.naverwebtoon.domain.model.NewWebtoon
 import org.sjhstudio.naverwebtoon.domain.model.WeekdayWebtoon
-import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
+import org.sjhstudio.naverwebtoon.domain.repository.WebtoonRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class WeekdayListViewModel @Inject constructor(
-    private val repository: WebToonRepository
+    private val repository: WebtoonRepository
 ) : ViewModel() {
 
     private var _weekdayList = MutableStateFlow<Map<String, List<WeekdayWebtoon>>>(emptyMap())

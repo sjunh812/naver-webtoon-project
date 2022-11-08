@@ -28,6 +28,7 @@ fun setStatusBarMode(window: Window, isLightMode: Boolean) {
         }
     } else {
         val flag = window.decorView.systemUiVisibility
+
         window.decorView.systemUiVisibility =
             if (isLightMode) flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             else flag and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -47,12 +48,11 @@ fun ViewPager2.setCurrentItemWithDuration(
     animator.addUpdateListener { valueAnimator ->
         val currentValue = valueAnimator.animatedValue as Int
         val currentPxToDrag = (currentValue - previousValue).toFloat()
+
         fakeDragBy(-currentPxToDrag)
         previousValue = currentValue
     }
-
     animator.addListener(object : Animator.AnimatorListener {
-
         override fun onAnimationStart(animation: Animator?) {
             beginFakeDrag()
         }
@@ -65,7 +65,6 @@ fun ViewPager2.setCurrentItemWithDuration(
 
         override fun onAnimationRepeat(animation: Animator?) {}
     })
-
     animator.interpolator = interpolator
     animator.duration = duration
     animator.start()

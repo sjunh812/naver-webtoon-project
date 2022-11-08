@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRes: Int) :
+abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRes: Int) :
     Fragment(layoutRes) {
 
     private var _binding: T? = null
@@ -23,6 +23,7 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRes: I
     ): View {
         _binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+
         return binding.root
     }
 

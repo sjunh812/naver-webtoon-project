@@ -112,10 +112,6 @@ class EpisodeListActivity :
     }
 
     companion object {
-
-        const val WEEKDAY = "weekday"
-        const val TITLE_ID = "title_id"
-
         private const val SHOW_TOOLBAR_OFFSET = 85f
     }
 }

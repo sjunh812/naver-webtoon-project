@@ -43,13 +43,11 @@ class NewWebtoonAdapter :
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<NewWebtoon>() {
-            override fun areItemsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon): Boolean {
-                return oldItem.id == newItem.id
-            }
+            override fun areItemsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon) =
+                oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon): Boolean {
-                return oldItem == newItem
-            }
+            override fun areContentsTheSame(oldItem: NewWebtoon, newItem: NewWebtoon) =
+                oldItem == newItem
         }
     }
 }

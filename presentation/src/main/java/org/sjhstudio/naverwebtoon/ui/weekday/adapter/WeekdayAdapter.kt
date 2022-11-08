@@ -18,7 +18,8 @@ class WeekdayAdapter(
         init {
             with(binding) {
                 root.setOnClickListener {
-                    val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
+                    val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION }
+                        ?: return@setOnClickListener
                     val item = getItem(position)
                     item?.let { onClicked(it.id) }
                 }
@@ -45,16 +46,13 @@ class WeekdayAdapter(
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<WeekdayWebtoon>() {
-            override fun areItemsTheSame(oldItem: WeekdayWebtoon, newItem: WeekdayWebtoon): Boolean {
-                return oldItem.id == newItem.id
-            }
+            override fun areItemsTheSame(oldItem: WeekdayWebtoon, newItem: WeekdayWebtoon) =
+                oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: WeekdayWebtoon,
                 newItem: WeekdayWebtoon
-            ): Boolean {
-                return oldItem == newItem
-            }
+            ) = oldItem == newItem
         }
     }
 }

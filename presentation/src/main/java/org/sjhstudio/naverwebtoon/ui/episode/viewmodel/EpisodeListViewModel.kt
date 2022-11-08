@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.sjhstudio.naverwebtoon.domain.model.Episode
 import org.sjhstudio.naverwebtoon.domain.model.WebtoonInfo
-import org.sjhstudio.naverwebtoon.domain.repository.WebToonRepository
-import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
-import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.WEEKDAY
+import org.sjhstudio.naverwebtoon.domain.repository.WebtoonRepository
+import org.sjhstudio.naverwebtoon.ui.weekday.view.WeekdayFragment.Companion.TITLE_ID
+import org.sjhstudio.naverwebtoon.ui.weekday.view.WeekdayFragment.Companion.WEEKDAY
 import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: WebToonRepository
+    private val repository: WebtoonRepository
 ) : ViewModel() {
 
     private val weekday: String = savedStateHandle[WEEKDAY] ?: throw IllegalStateException()
