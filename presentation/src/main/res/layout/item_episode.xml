@@ -8,11 +8,16 @@
         <variable
             name="data"
             type="org.sjhstudio.naverwebtoon.domain.model.Episode" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp">
 
@@ -58,11 +63,11 @@
             android:textColor="@color/red"
             android:textSize="8sp"
             android:textStyle="bold"
-            app:upLabel="@{data.up}"
             app:layout_constraintBottom_toBottomOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_title"
-            app:layout_constraintTop_toTopOf="@id/tv_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            app:upLabel="@{data.up}" />
 
         <TextView
             android:id="@+id/tv_score"

@@ -17,6 +17,13 @@
         android:theme="@style/Theme.NaverWebtoon"
         tools:targetApi="31">
         <activity
+            android:name=".ui.viewer.view.ViewerActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NaverWebtoon.Splash">
@@ -30,7 +37,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.episode.view.EpisodeListActivity"
+        <activity
+            android:name=".ui.episode.view.EpisodeListActivity"
             android:exported="true" />
     </application>
 

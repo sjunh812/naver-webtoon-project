@@ -16,4 +16,6 @@ interface WebtoonRepository {
     fun getWebToonInfo(titleId: Long, week: String): Flow<WebtoonInfo>
 
     fun getEpisodePagingData(titleId: Long, week: String): Flow<PagingData<Episode>>
+
+    fun getViewerPagingData(titleId: Long, dataNo: Long): Flow<PagingData<String>>
 }

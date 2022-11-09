@@ -1,5 +1,6 @@
 package org.sjhstudio.naverwebtoon.ui.episode.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -14,6 +15,7 @@ import org.sjhstudio.naverwebtoon.base.BaseActivity
 import org.sjhstudio.naverwebtoon.databinding.ActivityEpisodeListBinding
 import org.sjhstudio.naverwebtoon.ui.episode.adapter.EpisodeAdapter
 import org.sjhstudio.naverwebtoon.ui.episode.viewmodel.EpisodeListViewModel
+import org.sjhstudio.naverwebtoon.ui.viewer.view.ViewerActivity
 import org.sjhstudio.naverwebtoon.util.pxToDp
 import org.sjhstudio.naverwebtoon.util.setStatusBarMode
 import org.sjhstudio.naverwebtoon.util.showConfirmAlertDialog
@@ -24,7 +26,15 @@ class EpisodeListActivity :
     BaseActivity<ActivityEpisodeListBinding>(R.layout.activity_episode_list) {
 
     private val episodeListViewModel: EpisodeListViewModel by viewModels()
-    private val episodeAdapter: EpisodeAdapter by lazy { EpisodeAdapter() }
+    private val episodeAdapter: EpisodeAdapter by lazy {
+        EpisodeAdapter { episode ->
+            val intent = Intent(this, ViewerActivity::class.java).apply {
+                putExtra(TITLE_ID, episode.titleId)
+                putExtra(DATA_NO, episode.dataNo)
+            }
+            startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,5 +123,8 @@ class EpisodeListActivity :
 
     companion object {
         private const val SHOW_TOOLBAR_OFFSET = 85f
+
+        const val TITLE_ID = "title_id"
+        const val DATA_NO = "data_no"
     }
 }
