@@ -25,7 +25,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         lifecycleScope.launchWhenStarted {
@@ -33,16 +35,16 @@ class MainActivity : AppCompatActivity() {
             isReady = true
         }
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            splashScreen.setOnExitAnimationListener { splashScreenView ->
-//                ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f).run {
-//                    interpolator = AnticipateInterpolator()
-//                    duration = 2000L
-//                    doOnEnd { splashScreenView.remove() }
-//                    start()
-//                }
-//            }
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+                ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f).run {
+                    interpolator = AnticipateInterpolator()
+                    duration = 1000
+                    doOnEnd { splashScreenView.remove() }
+                    start()
+                }
+            }
+        }
 
         binding.root.viewTreeObserver.addOnPreDrawListener(
             object : ViewTreeObserver.OnPreDrawListener {
