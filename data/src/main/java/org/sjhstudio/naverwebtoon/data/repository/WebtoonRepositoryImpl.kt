@@ -12,6 +12,7 @@ import org.sjhstudio.naverwebtoon.data.mapperToThumbnail
 import org.sjhstudio.naverwebtoon.data.mapperToWebtoonId
 import org.sjhstudio.naverwebtoon.data.mapperToWebtoonInfoColor
 import org.sjhstudio.naverwebtoon.data.source.EpisodePagingSource
+import org.sjhstudio.naverwebtoon.data.source.ViewerPagingSource
 import org.sjhstudio.naverwebtoon.domain.model.*
 import org.sjhstudio.naverwebtoon.domain.repository.WebtoonRepository
 import javax.inject.Inject
@@ -147,7 +148,14 @@ internal class WebtoonRepositoryImpl @Inject constructor(
         }.flow
     }
 
+    override fun getViewerPagingData(titleId: Long, dataNo: Long): Flow<PagingData<String>> {
+        return Pager(config = PagingConfig(pageSize = VIEWER_PAGE_SIZE)) {
+            ViewerPagingSource(mobileApi, titleId, dataNo)
+        }.flow
+    }
+
     companion object {
         private const val EPISODE_PAGE_SIZE = 25
+        private const val VIEWER_PAGE_SIZE = 10
     }
 }

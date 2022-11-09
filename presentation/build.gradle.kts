@@ -55,6 +55,9 @@ dependencies {
     implementation(Library.AndroidX.NAVIGATION_UI)
     implementation(Library.AndroidX.PAGING)
     implementation(Library.AndroidX.SPLASH_SCREEN)
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     androidTestImplementation(Library.AndroidX.ANDROID_JUNIT)
     androidTestImplementation(Library.AndroidX.ESPRESSO)
 

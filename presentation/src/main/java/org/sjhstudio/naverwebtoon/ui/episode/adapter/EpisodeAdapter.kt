@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import org.sjhstudio.naverwebtoon.databinding.ItemEpisodeBinding
 import org.sjhstudio.naverwebtoon.domain.model.Episode
 
-class EpisodeAdapter : PagingDataAdapter<Episode, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
+class EpisodeAdapter(
+    private val onClicked: (episode: Episode) -> Unit
+) : PagingDataAdapter<Episode, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
 
     inner class EpisodeViewHolder(private val binding: ItemEpisodeBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -16,7 +18,9 @@ class EpisodeAdapter : PagingDataAdapter<Episode, EpisodeAdapter.EpisodeViewHold
         fun bind(episode: Episode) {
             with(binding) {
                 data = episode
-                println("xxx episode: $episode")
+                setClickListener {
+                    onClicked(episode)
+                }
             }
         }
     }
@@ -32,7 +36,6 @@ class EpisodeAdapter : PagingDataAdapter<Episode, EpisodeAdapter.EpisodeViewHold
     }
 
     companion object {
-
         private val diffCallback = object : DiffUtil.ItemCallback<Episode>() {
             override fun areItemsTheSame(oldItem: Episode, newItem: Episode) =
                 oldItem.dataNo == newItem.dataNo

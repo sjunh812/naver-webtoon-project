@@ -16,4 +16,7 @@ internal interface MobileWebtoonService {
         @Query("page") page: Int = 1,
         @Query("sortOrder") sortOrder: String = "DESC"
     ): ResponseBody
+
+    @GET("detail")
+    suspend fun getViewer(@Query("titleId") titleId: Long, @Query("no") no: Long): ResponseBody
 }
