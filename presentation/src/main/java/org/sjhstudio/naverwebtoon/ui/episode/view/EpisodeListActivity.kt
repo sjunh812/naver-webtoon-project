@@ -30,6 +30,7 @@ class EpisodeListActivity :
         EpisodeAdapter { episode ->
             val intent = Intent(this, ViewerActivity::class.java).apply {
                 putExtra(TITLE_ID, episode.titleId)
+                putExtra(TITLE, episode.title)
                 putExtra(DATA_NO, episode.dataNo)
             }
             startActivity(intent)
@@ -57,22 +58,34 @@ class EpisodeListActivity :
 
     private fun initView() {
         with(binding) {
-            ivBack.setOnClickListener { onBackPressed() }
             appBar.addOnOffsetChangedListener { appBar, verticalOffset ->
                 val standard = 1f - SHOW_TOOLBAR_OFFSET / pxToDp(appBar.height.toFloat())
                 val offset = 1f - abs(verticalOffset).toFloat() / appBar.totalScrollRange
                 val toolbarBackground =
                     ContextCompat.getDrawable(this@EpisodeListActivity, R.drawable.bg_toolbar)
+
                 setStatusBarMode(window = window, isLightMode = offset < 1.0f)
+
                 if (offset >= standard) {
                     toolbarBackground?.alpha = ((1 - offset) / 0.4f * 255).toInt()
-                    if (tvToolbarTitle.text.isNotEmpty()) tvToolbarTitle.text = ""
+
+                    if (tvToolbarTitle.text.isNotEmpty()) {
+                        tvToolbarTitle.text = ""
+                    }
                 } else {
-                    if (tvToolbarTitle.text.isEmpty()) tvToolbarTitle.text = tvTitle.text
+                    if (tvToolbarTitle.text.isEmpty()) {
+                        tvToolbarTitle.text = tvTitle.text
+                    }
                 }
+
                 toolbar.background = toolbarBackground
             }
-            layoutWebtoonInfoDetail.setOnClickListener { handleWebtoonDetailView() }
+            ivBack.setOnClickListener {
+                onBackPressed()
+            }
+            layoutWebtoonInfoDetail.setOnClickListener {
+                handleWebtoonDetailView()
+            }
         }
     }
 
@@ -84,14 +97,18 @@ class EpisodeListActivity :
                         if (info.isAdult) {
                             showConfirmAlertDialog(
                                 message = "해당 웹툰은 성인 웹툰으로\n이용이 제한됩니다."
-                            ) { finish() }
+                            ) {
+                                finish()
+                            }
                         }
                     }
                 }
             }
             lifecycleScope.launchWhenStarted {
                 episodePagingData.collectLatest { pagingData ->
-                    pagingData?.let { data -> episodeAdapter.submitData(data) }
+                    pagingData?.let { data ->
+                        episodeAdapter.submitData(data)
+                    }
                 }
             }
         }
@@ -100,6 +117,7 @@ class EpisodeListActivity :
     private fun handleWebtoonDetailView() {
         if (episodeListViewModel.detailExpanded) {
             episodeListViewModel.detailExpanded = false
+
             binding.layoutWebtoonInfoDetailHide.isVisible = false
             binding.tvSummaryDetail.maxLines = 1
             binding.ivArrow.setImageDrawable(
@@ -110,6 +128,7 @@ class EpisodeListActivity :
             )
         } else {
             episodeListViewModel.detailExpanded = true
+
             binding.layoutWebtoonInfoDetailHide.isVisible = true
             binding.tvSummaryDetail.maxLines = Int.MAX_VALUE
             binding.ivArrow.setImageDrawable(
@@ -125,6 +144,7 @@ class EpisodeListActivity :
         private const val SHOW_TOOLBAR_OFFSET = 85f
 
         const val TITLE_ID = "title_id"
+        const val TITLE = "title"
         const val DATA_NO = "data_no"
     }
 }
