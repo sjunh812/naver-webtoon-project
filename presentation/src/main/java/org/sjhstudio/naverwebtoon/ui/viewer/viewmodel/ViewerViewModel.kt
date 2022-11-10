@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.sjhstudio.naverwebtoon.domain.repository.WebtoonRepository
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.DATA_NO
+import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE
 import org.sjhstudio.naverwebtoon.ui.episode.view.EpisodeListActivity.Companion.TITLE_ID
 import javax.inject.Inject
 
@@ -19,14 +20,16 @@ class ViewerViewModel @Inject constructor(
     private val repository: WebtoonRepository
 ) : ViewModel() {
 
-    private val titleId: Long = savedStateHandle[TITLE_ID] ?: throw IllegalStateException()
-    private val dataNo: Long = savedStateHandle[DATA_NO] ?: throw IllegalStateException()
+    val titleId: Long = savedStateHandle[TITLE_ID] ?: throw IllegalStateException()
+    val title: String = savedStateHandle[TITLE] ?: throw IllegalStateException()
+    val dataNo: Long = savedStateHandle[DATA_NO] ?: throw IllegalStateException()
 
     private var _viewerList = MutableStateFlow<PagingData<String>>(PagingData.empty())
     val viewerList = _viewerList.asStateFlow()
 
+    var showBars = true
+
     init {
-        println("titleId: $titleId, dataNo: $dataNo")
         getViewerPagingData()
     }
 

@@ -2,6 +2,7 @@ package org.sjhstudio.naverwebtoon.ui.viewer.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.marginTop
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
