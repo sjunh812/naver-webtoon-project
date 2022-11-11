@@ -20,13 +20,21 @@ internal class ViewerPagingSource @Inject constructor(
             val document = Jsoup.parse(api.getViewer(titleId, dataNo).charStream().readText())
             val list = document.select("div.toon_view_lst li img").map { element ->
                 mapperToThumbnail(element.attr("data-src"))
+            }.takeIf { list ->
+                list.isNotEmpty()
+            } ?: document.select("div.viewer.cuttoon div.cut_flick_wrap img").map { element ->
+                mapperToThumbnail(element.attr("data-src"))
             }
+
+            println("xxx list: $list")
+
             val totalPage = list.size / RECORD + if (list.size % RECORD == 0) 0 else 1
             val start = (page - 1) * RECORD
             val end = if (start + RECORD >= list.size) list.size else start + RECORD
 
             if (page <= totalPage) {
                 val subList = list.subList(start, end)
+
                 LoadResult.Page(
                     data = subList,
                     prevKey = if (page == 1) null else page - 1,
@@ -39,26 +47,6 @@ internal class ViewerPagingSource @Inject constructor(
                     nextKey = null
                 )
             }
-//            val totalPage = list.size / RECORD + if (list.size % RECORD == 0) 0 else 1
-////            val start = page * RECORD
-////            val end = if (start + RECORD > list.size) list.size else start + RECORD
-//
-//            println("xxx page $page")
-//            if (page <= list.size - 1) {
-//                val subList = list.subList(page, if (page + RECORD >= list.size) list.size else page + RECORD)
-//
-//                LoadResult.Page(
-//                    data = subList,
-//                    prevKey = if (page == 0) null else page - RECORD,
-//                    nextKey = if (page + RECORD >= list.size) null else page + RECORD
-//                )
-//            } else {
-//                LoadResult.Page(
-//                    data = emptyList(),
-//                    prevKey = null,
-//                    nextKey = null
-//                )
-//            }
         } catch (e: Exception) {
             e.printStackTrace()
             LoadResult.Error(e)

@@ -17,6 +17,7 @@ fun Context.getStatusBarHeight(): Int {
 
 fun Context.showConfirmAlertDialog(message: String, onConfirmed: () -> Unit) {
     MaterialAlertDialogBuilder(this)
+        .setCancelable(false)
         .setMessage(message)
         .setPositiveButton("확인") { _, _ -> onConfirmed() }
         .create()
