@@ -73,6 +73,10 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>(R.layout.activity_vie
                     }
                 }
             })
+
+            ivBack.setOnClickListener {
+                finish()
+            }
         }
     }
 
