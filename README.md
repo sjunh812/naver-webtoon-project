@@ -1,6 +1,8 @@
 # 🎨 Naver Webtoon Clone
-### 네이버 웹툰 클론 앱
 ![ic_launcher](https://user-images.githubusercontent.com/79048895/202618052-92a99ea7-e56f-4cc5-a147-fb46ab21e761.png)
+### 네이버 웹툰 클론 앱  
+<br>
+<br>
 
 ## 📷 스크린샷
 <img src="https://user-images.githubusercontent.com/79048895/202618279-1ae00d8e-9129-4339-bb17-00cb8f5fd36f.jpg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/202618284-8c2944d8-f1e4-4271-a86f-c9ca63ce9575.jpg" width="180" height="390" /> 
